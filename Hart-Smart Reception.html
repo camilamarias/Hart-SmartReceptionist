@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hart District — Smart Receptionist</title>
+
+<!-- PWA Meta Tags -->
+<meta name="application-name" content="Hart Receptionist">
+<meta name="description" content="Hart District Smart Receptionist — Call routing and directory tool">
+<meta name="theme-color" content="#0a1628">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hart Receptionist">
+<link rel="manifest" id="manifest-placeholder">
+
+<!-- Inline SVG Icon as favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%230a1628'/%3E%3Ctext y='58' x='50' text-anchor='middle' font-size='52' font-family='serif'%3E%F0%9F%8E%93%3C/text%3E%3Ctext y='88' x='50' text-anchor='middle' font-size='14' fill='%23c8a84b' font-family='sans-serif' font-weight='bold'%3EHART%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-light: #1a3055;
+    --gold: #c8a84b;
+    --gold-light: #e8c96a;
+    --gold-pale: #f5e9c8;
+    --white: #f8f6f1;
+    --gray: #8a9ab5;
+    --green: #2d7a5e;
+    --green-light: #3aa876;
+    --red: #c0392b;
+    --red-light: #e74c3c;
+    --blue-accent: #2980b9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(200,168,75,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(41,128,185,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,22,40,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,168,75,0.2);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-logo {
+    width: 36px;
+    height: 36px;
+    background: var(--gold);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--white);
+    letter-spacing: 0.01em;
+  }
+
+  .header-title span {
+    color: var(--gold);
+  }
+
+  .header-time {
+    font-size: 0.8rem;
+    color: var(--gray);
+    text-align: right;
+  }
+
+  #clock {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--gold);
+    display: block;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  /* SEARCH BAR */
+  .search-section {
+    margin-bottom: 2rem;
+  }
+
+  .search-wrapper {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .search-label {
+    display: block;
+    text-align: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+  }
+
+  .search-label span { color: var(--gold); }
+
+  .search-input {
+    width: 100%;
+    padding: 1rem 1.5rem 1rem 3.5rem;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(200,168,75,0.3);
+    border-radius: 14px;
+    font-size: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--white);
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .search-input::placeholder { color: var(--gray); }
+
+  .search-input:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.09);
+    box-shadow: 0 0 0 4px rgba(200,168,75,0.1);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 1.1rem;
+  }
+
+  .search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0; right: 0;
+    background: var(--navy-mid);
+    border: 1px solid rgba(200,168,75,0.25);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    z-index: 200;
+    display: none;
+  }
+
+  .search-results.visible { display: block; }
+
+  .search-result-item {
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .search-result-item:hover { background: rgba(200,168,75,0.1); }
+  .search-result-item:last-child { border-bottom: none; }
+
+  .sri-left .sri-topic {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--white);
+  }
+
+  .sri-left .sri-dept {
+    font-size: 0.78rem;
+    color: var(--gray);
+    margin-top: 2px;
+  }
+
+  .sri-ext {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+    background: rgba(255,255,255,0.04);
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .tab {
+    flex: 1;
+    padding: 0.6rem 0.5rem;
+    border: none;
+    background: transparent;
+    color: var(--gray);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .tab:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+
+  .tab.active {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* QUICK BOARD - Inquiry Cards */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .inquiry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1rem;
+  }
+
+  .inquiry-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .inquiry-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--gold);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .inquiry-card:hover {
+    border-color: rgba(200,168,75,0.4);
+    background: rgba(200,168,75,0.07);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  .inquiry-card:hover::before { opacity: 1; }
+
+  .ic-topic {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: var(--white);
+  }
+
+  .ic-contact {
+    font-size: 0.82rem;
+    color: var(--gray);
+    margin-bottom: 8px;
+  }
+
+  .ic-ext {
+    display: inline-block;
+    background: rgba(200,168,75,0.15);
+    color: var(--gold);
+    border: 1px solid rgba(200,168,75,0.3);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 3px 12px;
+    border-radius: 20px;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal-overlay.visible { display: flex; }
+
+  .modal {
+    background: var(--navy-mid);
+    border: 1px solid rgba(200,168,75,0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 520px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    color: var(--gray);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .modal-close:hover { background: var(--red); color: white; }
+
+  .modal-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: var(--white);
+  }
+
+  .modal-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    margin: 1rem 0;
+  }
+
+  .modal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.7rem;
+  }
+
+  .modal-row-label {
+    font-size: 0.8rem;
+    color: var(--gray);
+    font-weight: 500;
+    min-width: 110px;
+  }
+
+  .modal-row-value {
+    font-size: 0.9rem;
+    color: var(--white);
+    font-weight: 500;
+    text-align: right;
+    flex: 1;
+  }
+
+  .modal-ext-big {
+    display: block;
+    text-align: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--gold);
+    margin: 1rem 0;
+    letter-spacing: 0.05em;
+  }
+
+  .modal-script {
+    background: rgba(200,168,75,0.08);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+    color: var(--white);
+    line-height: 1.6;
+    font-style: italic;
+    margin-top: 1rem;
+  }
+
+  .modal-script strong { font-style: normal; color: var(--gold); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }
+
+  .modal-notes {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-top: 0.8rem;
+  }
+
+  .modal-notes strong { color: var(--white); display: block; margin-bottom: 4px; }
+
+  /* DIRECTORY */
+  .directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .dept-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .dept-header {
+    background: rgba(200,168,75,0.12);
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid rgba(200,168,75,0.15);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .dept-entries { padding: 0.5rem; }
+
+  .dept-entry {
+    padding: 0.6rem 0.7rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.15s;
+    cursor: default;
+  }
+
+  .dept-entry:hover { background: rgba(255,255,255,0.05); }
+
+  .de-info .de-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .de-info .de-role {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 1px;
+  }
+
+  .de-ext {
+    background: rgba(200,168,75,0.12);
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 2px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    border: 1px solid rgba(200,168,75,0.2);
+  }
+
+  /* PROCEDURES */
+  .proc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .proc-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .proc-header {
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .proc-icon {
+    font-size: 1.3rem;
+  }
+
+  .proc-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--white);
+  }
+
+  .proc-steps {
+    padding: 0.8rem 1.2rem;
+  }
+
+  .proc-step {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0.7rem;
+    align-items: flex-start;
+  }
+
+  .proc-step:last-child { margin-bottom: 0; }
+
+  .step-num {
+    min-width: 22px;
+    height: 22px;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 0.72rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .step-text {
+    font-size: 0.83rem;
+    color: var(--gray);
+    line-height: 1.5;
+  }
+
+  .step-text strong { color: var(--white); }
+
+  /* SCHOOL SITES */
+  .sites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .site-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+  }
+
+  .site-card:hover {
+    border-color: rgba(200,168,75,0.3);
+    background: rgba(200,168,75,0.05);
+  }
+
+  .site-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--white);
+  }
+
+  .site-num {
+    font-size: 0.78rem;
+    color: var(--gray);
+    margin-top: 2px;
+  }
+
+  .site-phone {
+    font-size: 0.8rem;
+    color: var(--gold);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  /* GREETING BAR */
+  .greeting-bar {
+    background: rgba(200,168,75,0.08);
+    border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .greeting-icon { font-size: 1.4rem; }
+
+  .greeting-text {
+    font-size: 0.85rem;
+    color: var(--gold-pale);
+  }
+
+  .greeting-script {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--gold);
+    display: block;
+    font-size: 0.95rem;
+    margin-top: 2px;
+  }
+
+  /* EMERGENCY STRIP */
+  .emergency-strip {
+    background: rgba(192,57,43,0.15);
+    border: 1px solid rgba(192,57,43,0.35);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .emg-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--red-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-basis: 100%;
+  }
+
+  .emg-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--white);
+  }
+
+  .emg-ext {
+    background: var(--red);
+    color: white;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .main { padding: 1rem; }
+    .tabs { flex-wrap: wrap; }
+    .tab { flex: none; width: calc(50% - 3px); }
+  }
+
+  /* ANIMATIONS */
+  .fade-in {
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-green { background: rgba(45,122,94,0.3); color: var(--green-light); border: 1px solid rgba(45,122,94,0.4); }
+  .badge-gold { background: rgba(200,168,75,0.2); color: var(--gold); border: 1px solid rgba(200,168,75,0.3); }
+
+  /* HELPER */
+  .helper-intro {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .helper-step {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 1.3rem 1.5rem;
+    margin-bottom: 1.2rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .helper-question {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+
+  .helper-sub {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .helper-script {
+    background: rgba(200,168,75,0.08);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    color: var(--gold-pale);
+    font-style: italic;
+    margin-bottom: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .helper-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .helper-btn {
+    padding: 0.55rem 1.1rem;
+    border-radius: 30px;
+    border: 1.5px solid rgba(200,168,75,0.35);
+    background: rgba(200,168,75,0.08);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .helper-btn:hover {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
+
+  .helper-btn.selected {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+  }
+
+  .helper-result {
+    background: rgba(45,122,94,0.12);
+    border: 1.5px solid rgba(58,168,118,0.35);
+    border-radius: 16px;
+    padding: 1.4rem 1.5rem;
+    margin-top: 1rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .helper-result-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .helper-result-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+
+  .helper-result-ext {
+    font-size: 2rem;
+    font-family: 'DM Serif Display', serif;
+    color: var(--gold);
+    display: block;
+    margin: 0.5rem 0;
+  }
+
+  .helper-result-say {
+    background: rgba(200,168,75,0.08);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+    color: var(--gold-pale);
+    font-style: italic;
+    margin-top: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .helper-result-note {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-top: 0.7rem;
+    line-height: 1.5;
+  }
+
+  .helper-reset {
+    margin-top: 1.2rem;
+    padding: 0.55rem 1.4rem;
+    border-radius: 30px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    background: transparent;
+    color: var(--gray);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: block;
+  }
+
+  .helper-reset:hover { color: var(--white); border-color: rgba(255,255,255,0.35); }
+
+  /* RIGHTS */
+  .rights-intro {
+    background: rgba(41,128,185,0.08);
+    border: 1px solid rgba(41,128,185,0.2);
+    border-radius: 12px;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .rights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+
+  .rights-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(41,128,185,0.2);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .rights-header {
+    background: rgba(41,128,185,0.12);
+    padding: 0.8rem 1.1rem;
+    border-bottom: 1px solid rgba(41,128,185,0.15);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #5dade2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rights-body {
+    padding: 0.9rem 1.1rem;
+    font-size: 0.83rem;
+    color: var(--gray);
+    line-height: 1.65;
+  }
+
+  .rights-body strong { color: var(--white); }
+
+  .rights-body ul {
+    margin: 0.4rem 0 0 1rem;
+    padding: 0;
+  }
+
+  .rights-body ul li {
+    margin-bottom: 0.35rem;
+  }
+
+  .rights-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(41,128,185,0.15);
+    color: #5dade2;
+    border: 1px solid rgba(41,128,185,0.25);
+    margin-top: 0.6rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <div class="header-logo">🎓</div>
+    <div class="header-title">Hart District <span>Receptionist</span></div>
+  </div>
+  <div class="header-time">
+    <span id="clock"></span>
+    <span id="dateDisplay"></span>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- SEARCH -->
+  <div class="search-section">
+    <label class="search-label">What does the caller <span>need?</span></label>
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Type a topic, name, or department..." autocomplete="off">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- GREETING -->
+  <div class="greeting-bar">
+    <div class="greeting-icon">📞</div>
+    <div class="greeting-text">
+      Standard Greeting:
+      <span class="greeting-script">"Hart District, how may I direct your call?"</span>
+    </div>
+  </div>
+
+  <!-- EMERGENCY -->
+  <div class="emergency-strip">
+    <div class="emg-title">⚡ Emergency Numbers</div>
+    <div class="emg-item">🔥 Fire <span class="emg-ext">#12</span></div>
+    <div class="emg-item">🚔 Sheriff <span class="emg-ext">#11</span></div>
+    <div class="emg-item">🏥 Henry Mayo <span class="emg-ext">#13</span></div>
+    <div class="emg-item">🚗 Highway Patrol <span class="emg-ext">#14</span></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('quickboard')">⚡ Quick Board</button>
+    <button class="tab" onclick="switchTab('helper')">🤔 Not Sure?</button>
+    <button class="tab" onclick="switchTab('directory')">📋 Directory</button>
+    <button class="tab" onclick="switchTab('schools')">🏫 School Sites</button>
+    <button class="tab" onclick="switchTab('procedures')">📋 Procedures</button>
+    <button class="tab" onclick="switchTab('rights')">⚖️ CA Rights</button>
+  </div>
+
+  <!-- TAB: QUICK BOARD -->
+  <div class="tab-panel active fade-in" id="tab-quickboard">
+    <div class="section-title">⚡ Inquiry Quick Board <span class="badge badge-gold">Tap any card for details</span></div>
+    <div class="inquiry-grid" id="inquiryGrid"></div>
+  </div>
+
+  <!-- TAB: HELPER -->
+  <div class="tab-panel fade-in" id="tab-helper">
+    <div class="section-title">🤔 Caller Isn't Sure? — Decision Helper</div>
+    <div class="helper-intro">
+      Use this when a caller can't clearly explain what they need. Ask the questions below in order and tap the answer to find out where to direct them.
+    </div>
+    <div id="helperFlow"></div>
+  </div>
+
+  <!-- TAB: DIRECTORY -->
+  <div class="tab-panel fade-in" id="tab-directory">
+    <div class="section-title">📋 Full Department Directory</div>
+    <div class="directory-grid" id="directoryGrid"></div>
+  </div>
+
+  <!-- TAB: SCHOOL SITES -->
+  <div class="tab-panel fade-in" id="tab-schools">
+    <div class="section-title">🏫 School Sites</div>
+    <div class="sites-grid" id="sitesGrid"></div>
+  </div>
+
+  <!-- TAB: PROCEDURES -->
+  <div class="tab-panel fade-in" id="tab-procedures">
+    <div class="section-title">📋 Daily Procedures & Protocols</div>
+    <div class="proc-grid" id="procGrid"></div>
+  </div>
+
+  <!-- TAB: CA RIGHTS -->
+  <div class="tab-panel fade-in" id="tab-rights">
+    <div class="section-title">⚖️ California Workplace — Know Your Rights</div>
+    <div class="rights-intro">
+      This section summarizes the California Workplace Know Your Rights guide (CA Dept. of Industrial Relations). Use the search bar above to find specific topics.
+    </div>
+    <div class="rights-grid" id="rightsGrid"></div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+// =============================================
+// DATA
+// =============================================
+
+const INQUIRIES = [
+  {
+    topic: "Development Fees",
+    contact: "Marc Bradley",
+    ext: "x286",
+    dept: "Facilities",
+    script: "I'll transfer you to our Facilities department regarding development fees.",
+    notes: "Marc Bradley handles all development fee questions."
+  },
+  {
+    topic: "65+ Property Tax Exemption",
+    contact: "District does not participate",
+    ext: "x286",
+    dept: "Facilities",
+    script: "The District does not participate in the 65+ property tax exemption. You may contact Marc at x286 for more information.",
+    notes: "Refer to Marc x286 but let caller know district does not participate."
+  },
+  {
+    topic: "Facility Rental",
+    contact: "Civic Center",
+    ext: "x445",
+    dept: "Facilities",
+    script: "I'll transfer you to our Civic Center team for facility rental inquiries.",
+    notes: "All facility use requests go through Civic Center at x445."
+  },
+  {
+    topic: "Flyer Approval",
+    contact: "Cristina Herrera",
+    ext: "x207",
+    dept: "Ed. Services",
+    script: "I'll connect you with Cristina Herrera in Educational Services regarding flyer approval.",
+    notes: "All flyers must be approved before being sent to school sites."
+  },
+  {
+    topic: "IEP Records",
+    contact: "Hanaa Soliman",
+    ext: "x211",
+    dept: "Special Education",
+    script: "I'll transfer you to Special Education for IEP records.",
+    notes: "Student or parent must fill out the SpEd Request for Student Records form. Found in the filing cabinet by label."
+  },
+  {
+    topic: "Request for SpEd",
+    contact: "Susie Edwards",
+    ext: "x223",
+    dept: "Special Education",
+    script: "I'll connect you with our Special Education department.",
+    notes: "Susie Edwards is the Secretary. If unavailable, try Meena (Harihavan) at x377."
+  },
+  {
+    topic: "Spanish Calls",
+    contact: "Elizabeth / Meena (Harihavan)",
+    ext: "x377",
+    dept: "Special Education",
+    script: "Un momento, por favor. Le voy a transferir.",
+    notes: "Franz/Claudia A. also handles Spanish calls for SpEd."
+  },
+  {
+    topic: "Summer School",
+    contact: "Carolyn Hoffman",
+    ext: "x228",
+    dept: "CTE-CCR",
+    script: "I will transfer you to Carolyn Hoffman for summer school inquiries.",
+    notes: "All summer school calls go to Carolyn Hoffman x228. Staff summer school assignments → Kelly Csulak x276. Summer sports → Michelle Craig x417."
+  },
+  {
+    topic: "W-2 Form Request",
+    contact: "Payroll — via Email",
+    ext: "Email only",
+    dept: "Payroll",
+    script: "W-2 requests must be submitted by email to payroll@hartdistrict.org. Please include your full name, date of birth, address, and last 3 digits of your Social Security Number.",
+    notes: "Email: payroll@hartdistrict.org. Required info: Full Name, Date of Birth, Full Address, Last 3 digits of SSN. Do NOT ask for or write down full SSN — last 3 only."
+  },
+  {
+    topic: "District Vehicle Accident",
+    contact: "Stacey Meyers",
+    ext: "x268/339",
+    dept: "Transportation",
+    script: "I will transfer you to our Transportation Coordinator regarding the vehicle accident.",
+    notes: "All calls reporting accidents involving district vehicles go to Stacey Meyers at x268 or x339."
+  },
+  {
+    topic: "Transfer Appeal (Denied Transfer — Any District)",
+    contact: "Student Services — Joanna Terrazas",
+    ext: "x212",
+    dept: "Student Services",
+    script: "I'll connect you with our Student Services department. They will be able to assist you with your transfer appeal.",
+    notes: "Parent appealing a denied transfer — whether inter-district or intra-district — goes to Student Services. Joanna Terrazas x212 is the first contact. Sal Frias x210/212 handles formal appeals at the district level if needed."
+  },
+  {
+    topic: "Transferring Out",
+    contact: "Form — In-person or Email",
+    ext: "x212",
+    dept: "Student Services",
+    script: "For transferring out of the district, a parent must fill out the Inter-District Transfer form. You can pick it up in person or we can email it to you. You will also need to set up an appointment with Mr. Frias at studentservices@hartdistrict.org or x212.",
+    notes: "Release to another district: parent fills out Inter-District Transfer form found in filing cabinet by label."
+  },
+  {
+    topic: "Transfers from Other Districts to Hart",
+    contact: "Joanna Terrazas",
+    ext: "x212",
+    dept: "Student Services",
+    script: "I'll connect you with Student Services to assist with transferring into the Hart District.",
+    notes: "Step 1: Parent gets release from their local district. Step 2: Contact Joanna Terrazas x212."
+  },
+  {
+    topic: "Transfers Within Hart (Intra-District)",
+    contact: "School Site Registrar",
+    ext: "—",
+    dept: "Student Services",
+    script: "For transfers within the Hart District, please contact the registrar at your attendance boundary school. You can also apply online at hartdistrict.org — go to Schools > Intra-District Transfer.",
+    notes: "Application window opens mid-February/March. Appeals go to the Principal of the school of residence."
+  },
+  {
+    topic: "Appeal for IDTs",
+    contact: "Principal – School of Residence",
+    ext: "—",
+    dept: "Student Services",
+    script: "For an appeal on an Intra-District Transfer, you'll need to contact the principal at your school of residence.",
+    notes: ""
+  },
+  {
+    topic: "Work Permits",
+    contact: "Nancy",
+    ext: "x232",
+    dept: "Student Services",
+    script: "I'll transfer you to Nancy for work permit assistance.",
+    notes: "During school sessions: refer to school site and white binder for point of contact. During school breaks: Jessica Martinez x365 or Claudia Balouzian x222."
+  },
+  {
+    topic: "PSATs",
+    contact: "School Site",
+    ext: "—",
+    dept: "Testing",
+    script: "For PSAT and SAT questions, please contact your student's school site directly, or you can reach the College Board.",
+    notes: "SAT/College Application Waivers: email foodservice@hartdistrict.org with student name, ID, and school site."
+  },
+  {
+    topic: "Education Verification",
+    contact: "School Site Registrar",
+    ext: "—",
+    dept: "HR / School Site",
+    script: "For education verification, please contact the registrar at the school site where the student is or was enrolled.",
+    notes: "Employment verification (for loans, mortgages) → Sondra Celaya x251."
+  },
+  {
+    topic: "Media Calls",
+    contact: "Debbie Dunn",
+    ext: "x206",
+    dept: "Communications",
+    script: "I'll transfer you to our Communications department.",
+    notes: "All media and press inquiries go to Debbie Dunn, Director of Communications."
+  },
+  {
+    topic: "AB 2534",
+    contact: "Kristiana Molina",
+    ext: "x278",
+    dept: "HR",
+    script: "I'll transfer you to HR regarding AB 2534.",
+    notes: ""
+  },
+  {
+    topic: "Booster Club",
+    contact: "Denise Miller / Gretchen",
+    ext: "x242 / x266",
+    dept: "Business Services",
+    script: "I'll transfer you to our Business Services office for Booster Club inquiries.",
+    notes: "Denise Miller x242 or Gretchen Bergstrom x266."
+  },
+  {
+    topic: "6th Grade Placement Tests",
+    contact: "Student's Designated Elementary School",
+    ext: "—",
+    dept: "School Site",
+    script: "For 6th grade placement tests, please contact your child's designated elementary school directly. They handle all placement testing at the school site.",
+    notes: "Do not transfer to district office. Direct caller to their elementary school. Placement tests are handled at the school site level."
+  },
+  {
+    topic: "Job Interview — Scheduling or Questions",
+    contact: "Stephanie Migdol",
+    ext: "x203",
+    dept: "Student Services",
+    script: "I will transfer you to Stephanie Migdol for job interview inquiries.",
+    notes: "Stephanie Migdol handles job interview scheduling and related questions. Per supervisor instruction."
+  },
+  {
+    topic: "Biddings / Bids",
+    contact: "Rosa Valenzuela",
+    ext: "x275",
+    dept: "Purchasing",
+    script: "I will connect you with Rosa Valenzuela in our Purchasing department for bidding inquiries.",
+    notes: "Rosa Valenzuela handles all contracts and bids. x275."
+  },
+  {
+    topic: "Personal Information Update — Parent (Phone, Email, Address)",
+    contact: "School Site Registrar",
+    ext: "—",
+    dept: "School Site",
+    script: "To update your contact information, please reach out to the registrar at your child's school site directly. They maintain all student and parent contact records.",
+    notes: "Parents updating personal info (phone, email, address) go to their school site registrar — not the district office. Employee address changes go to Angelica Mendez x410."
+  },
+  {
+    topic: "Free/Reduced Lunch",
+    contact: "Shannon Abarca / FRAM",
+    ext: "x269 / x216",
+    dept: "Food Services",
+    script: "I'll connect you with our Food Services team for lunch program inquiries.",
+    notes: "Email: foodservice@hartdistrict.org. Shannon Abarca x269 or FRAM x216 (or x217 for applications)."
+  },
+  {
+    topic: "Benefits (Health/Dental)",
+    contact: "Melissa Hernandez",
+    ext: "x267",
+    dept: "HR",
+    script: "I'll transfer you to our Benefits department.",
+    notes: "Handles both Certificated and Classified employee benefits."
+  },
+  {
+    topic: "Superintendent",
+    contact: "Erica Galicia / Rheeza McMillan",
+    ext: "x201 / x209 / x204",
+    dept: "Superintendent's Office",
+    script: "I'll transfer you to the Superintendent's office.",
+    notes: "Main line x201. Erica Galicia (Exec. Admin. Asst.) x209. Rheeza McMillan x204."
+  },
+  {
+    topic: "Transcripts",
+    contact: "Stephanie Migdol",
+    ext: "x203",
+    dept: "Student Services",
+    script: "Transcripts must be requested from the registrar at the school site where the student is currently enrolled or previously attended. I can also connect you with Stephanie at x203.",
+    notes: "Albert Einstein (K-6): contact Acton Agua Dulce School District at (661) 269-0750. Grades 7-12 Hart schools: collect name, DOB, phone, email → send to studentservices@hartdistrict.org."
+  },
+  {
+    topic: "Subpoenas / Summons",
+    contact: "Kristiana Molina / Stephanie Migdol",
+    ext: "x278 / x203",
+    dept: "HR / Student Services",
+    script: "Please hold while I contact the appropriate person.",
+    notes: "DO NOT accept or sign. Employee records → Kristiana x278. Student records → Stephanie x203. If unavailable → Sonia Pishehvar x253. Log on tracker sheet."
+  },
+  {
+    topic: "College Webinar / Wish Foundation",
+    contact: "Debbie Dunn",
+    ext: "x206",
+    dept: "Communications",
+    script: "I'll transfer you to Debbie Dunn regarding college webinar and Wish Foundation inquiries.",
+    notes: "Can also email wish@hartdistrict.org"
+  },
+  {
+    topic: "TB Test — Certificated Employee",
+    contact: "Mignon Stevenson",
+    ext: "x282",
+    dept: "HR — Certificated",
+    script: "I'll transfer you to our Certificated HR team for TB testing information.",
+    notes: "Mignon Stevenson handles TB testing for certificated staff (teachers, counselors, etc.)"
+  },
+  {
+    topic: "TB Test — Classified Employee",
+    contact: "Lisa Arnone",
+    ext: "x220",
+    dept: "HR — Classified",
+    script: "I'll transfer you to our Classified HR team for TB testing information.",
+    notes: "Lisa Arnone handles TB testing for classified staff (support staff, aides, subs, etc.)"
+  },
+  {
+    topic: "Cap and Gown — Any Subject",
+    contact: "Kristiana Molina",
+    ext: "x278",
+    dept: "HR",
+    script: "I will transfer you to Kristiana Molina who will be able to assist you with that.",
+    notes: "ALL cap and gown related calls go to Kristiana Molina x278 — purchases, refunds, orders, questions, any subject."
+  },
+  {
+    topic: "SmartFind — Technical Issue (Login, App Not Working)",
+    contact: "Technology / IT",
+    ext: "x777",
+    dept: "Technology",
+    script: "I'll transfer you to our Technology department for SmartFind technical support.",
+    notes: "x777 is for TECHNICAL issues only — can't log in, app errors, system not working. For SmartFind sub assignments or eligibility questions → Angelica Mendez x410."
+  },
+  {
+    topic: "SmartFind — Sub Assignments / Eligibility",
+    contact: "Angelica Mendez",
+    ext: "x410",
+    dept: "HR — Classified",
+    script: "I'll connect you with Angelica in HR for SmartFind assignment and eligibility assistance.",
+    notes: "Angelica handles SmartFind system support for sub placements, eligibility, and how the system works. Technical issues (login, app errors) → IT at x777."
+  }
+];
+
+const DIRECTORY = [
+  {
+    dept: "Superintendent's Office",
+    entries: [
+      { name: "Michael Vierra", role: "Superintendent", ext: "x201", location: "Superintendent" },
+      { name: "Erica Galicia", role: "Exec. Admin. Assistant", ext: "x209", location: "Superintendent" },
+      { name: "Rheeza McMillan", role: "Admin. Assistant", ext: "x204", location: "Superintendent" },
+      { name: "Debbie Dunn", role: "Dir. Communications and Community Engagement", ext: "x206", location: "Superintendent" },
+    ]
+  },
+  {
+    dept: "Human Resources — Certificated",
+    entries: [
+      { name: "Dr. Collyn Nielsen", role: "Deputy Superintendent (HR)", ext: "x278", location: "Human Resources" },
+      { name: "Kristiana Molina", role: "Sr. Admin. Asst. (Subpoenas, AB2534, Dr. Nielsen calls)", ext: "x278", location: "HR-Certificated" },
+      { name: "Michelle Craig", role: "Asst. — Coaches, Volunteers, Athletics, HR Complaints", ext: "x417", location: "HR-Certificated" },
+      { name: "Mark Crawford", role: "Director HR and Athletics", ext: "x316", location: "HR-Certificated" },
+      { name: "Sondra Celaya", role: "HR Specialist — FMLA, Unemployment, Employment Verification", ext: "x251", location: "HR-Certificated" },
+      { name: "Lisa Holt", role: "HR Programs Manager — New Hires, Credentials, Salary", ext: "x280", location: "HR-Certificated" },
+      { name: "Mignon Stevenson", role: "Credentials Tech — Cert. Subs, Job Postings, Payroll Cert.", ext: "x282", location: "HR-Certificated" },
+      { name: "Kristina Frame", role: "HR-Certificated", ext: "x374", location: "HR-Certificated" },
+    ]
+  },
+  {
+    dept: "Human Resources — Classified",
+    entries: [
+      { name: "John A. Muraki", role: "Director of Classified Personnel", ext: "x277", location: "HR-Classified" },
+      { name: "Lisa Arnone", role: "Admin. Asst. (Workers Comp, Catastrophic Leave, TB)", ext: "x220", location: "HR-Classified" },
+      { name: "Gina Doe", role: "HR Analyst — Recruitment, Testing, Exam Announcements", ext: "x411", location: "HR-Classified" },
+      { name: "Kelly Csulak", role: "HR Analyst — Requisitions, Salary, Summer School Assignments", ext: "x276", location: "HR-Classified" },
+      { name: "Angelica Mendez", role: "HR Asst. — Address Change, SmartFind, Badges, Payroll", ext: "x410", location: "HR-Classified" },
+      { name: "Debbie Lien", role: "HR Technician — Onboarding, Promotions, Separations", ext: "x775", location: "HR-Classified" },
+      { name: "Deyssy Esquivel R.", role: "HR-Classified", ext: "x382", location: "HR-Classified" },
+    ]
+  },
+  {
+    dept: "Student Services",
+    entries: [
+      { name: "Tara Brown", role: "Asst. Superintendent, Student Services", ext: "x203", location: "Student Services" },
+      { name: "Sal Frias", role: "Chief Admin. Officer, Student Services", ext: "x210", location: "CAO - Student Services" },
+      { name: "Joanna Terrazas", role: "Admin. Asst. — Student Records, Enrollment, Transfers", ext: "x212", location: "Student Services" },
+      { name: "Stephanie Migdol", role: "Admin. Asst. — Transcripts, Student Subpoenas", ext: "x203", location: "Student Services" },
+      { name: "Sarah Gilberts", role: "Student Services", ext: "x219", location: "Student Services" },
+      { name: "Ira Rounsaville", role: "Student Services", ext: "x218", location: "Student Services" },
+      { name: "Nancy Bailey", role: "Work Permits", ext: "x232", location: "CTE-CCR" },
+    ]
+  },
+  {
+    dept: "Special Education",
+    entries: [
+      { name: "Joanna White", role: "Director of Special Education", ext: "x377", location: "SpEd" },
+      { name: "Meenakshi Hariharan", role: "Admin. Asst. — SpEd, Spanish calls", ext: "x377", location: "SpEd" },
+      { name: "Susie Edwards", role: "Secretary", ext: "x223", location: "SpEd" },
+      { name: "Hanaa Soliman", role: "IEP Records", ext: "x211", location: "SpEd" },
+      { name: "Mary Little", role: "ERICS / Therapist Internships", ext: "x385", location: "ERICS" },
+      { name: "Nicholas Betty", role: "Director ERICS", ext: "x386", location: "ERICS" },
+      { name: "Elizabeth Calzadillas", role: "Admin. Asst. SpEd / Curriculum", ext: "x225", location: "SpEd" },
+      { name: "Heidi Horowitz", role: "SpEd", ext: "x391", location: "SpEd" },
+      { name: "Hilde Ernsberger", role: "SpEd", ext: "x747", location: "SpEd" },
+      { name: "Cindy Molacek", role: "SpEd", ext: "x416", location: "SpEd" },
+      { name: "Cynthia Sherman", role: "SpEd", ext: "x422", location: "SpEd" },
+      { name: "Thushitha Shankar", role: "SpEd", ext: "x313", location: "SpEd" },
+      { name: "Shelby Milteer", role: "SpEd", ext: "x391", location: "SpEd" },
+      { name: "Julie Albitre", role: "SpEd", ext: "x285", location: "SpEd" },
+    ]
+  },
+  {
+    dept: "Educational Services",
+    entries: [
+      { name: "Vince Ferry", role: "Asst. Superintendent, Ed. Services", ext: "x207", location: "Ed. Services" },
+      { name: "Cristina Herrera-Lopez", role: "Admin. Asst. — Flyer Approvals", ext: "x207", location: "Ed. Services" },
+      { name: "Dave LeBarron", role: "Director, Curriculum and Assessment", ext: "x226", location: "Curriculum" },
+      { name: "Jan Daisher", role: "Director, Special Programs", ext: "x383", location: "Special Programs" },
+      { name: "Courtney Straka", role: "Supervisor, Professional Development", ext: "x318", location: "Special Programs" },
+      { name: "Kim Jimenez", role: "Ed. Services", ext: "x319", location: "Ed. Services" },
+      { name: "Kacey Kapp", role: "Ed. Services", ext: "x312", location: "Ed. Services" },
+      { name: "Aaron Kirkland", role: "Ed. Services", ext: "x320", location: "Ed. Services" },
+      { name: "David Williams", role: "Ed. Services", ext: "x317", location: "Ed. Services" },
+    ]
+  },
+  {
+    dept: "CTE-CCR",
+    entries: [
+      { name: "Carolyn Hoffman", role: "CAO Educational Services / Director CCR", ext: "x228", location: "CTE-CCR" },
+      { name: "Claudia Balouzian", role: "Admin. Asst. CCR / Work Permits (school breaks)", ext: "x222", location: "CTE-CCR" },
+      { name: "Taline Balouzian", role: "CTE-CCR", ext: "x248", location: "CTE-CCR" },
+      { name: "Shari Kraidman", role: "CTE-CCR", ext: "x238", location: "CTE-CCR" },
+      { name: "Olga Lavalle", role: "CTE-CCR", ext: "x367", location: "CTE-CCR" },
+      { name: "Jessica Martinez", role: "CTE-CCR / Work Permits (school breaks)", ext: "x365", location: "CTE-CCR" },
+      { name: "Veronica Reyes", role: "CTE-CCR", ext: "x368", location: "CTE-CCR" },
+      { name: "Alicia Viera", role: "CTE-CCR", ext: "x366", location: "CTE-CCR" },
+      { name: "Yvonne Castaneda", role: "CTE-CCR", ext: "x389", location: "CTE-CCR" },
+    ]
+  },
+  {
+    dept: "Business Services and Payroll",
+    entries: [
+      { name: "Jon Carrino", role: "Asst. Superintendent, Business Services", ext: "x254", location: "Business Services" },
+      { name: "Denise Miller", role: "Admin. Asst. — Booster Club", ext: "x242", location: "Business Services" },
+      { name: "Gretchen Bergstrom", role: "Director Fiscal Services / Booster Club", ext: "x266", location: "Fiscal" },
+      { name: "Veronica Reyes-Cruz", role: "Accounting Supervisor (Payroll)", ext: "x270", location: "Accounting" },
+      { name: "Brandy Speir", role: "Certificated Payroll", ext: "x255", location: "Payroll" },
+      { name: "Armineh Karapet", role: "Classified Payroll", ext: "x261", location: "Payroll" },
+      { name: "Patrick McHorney", role: "Payroll Specialist", ext: "x272", location: "Payroll" },
+      { name: "Melissa Hernandez", role: "Benefits — Health/Dental (Cert. and Class.)", ext: "x267", location: "Benefits" },
+      { name: "Accounts Payable", role: "Bills, Invoices, Benefits payments", ext: "x248/249", location: "Fiscal" },
+      { name: "Annie Hamilton", role: "Accounting", ext: "x257", location: "Accounting" },
+      { name: "Elena Muradova", role: "Accounting", ext: "x288", location: "Accounting" },
+      { name: "Cynthia Ramirez", role: "Accounting", ext: "x252", location: "Accounting" },
+      { name: "Shannon Rodgers-Abarca", role: "Accounting / Free-Reduced Lunch", ext: "x239", location: "Accounting" },
+      { name: "Jessica Smith", role: "Accounting - Audit", ext: "x287", location: "Accounting - Audit" },
+      { name: "Janell Wheeler", role: "Accounting - Audit", ext: "x376", location: "Accounting - Audit" },
+      { name: "Wade Takamoto", role: "Accounting", ext: "x215", location: "Accounting" },
+      { name: "Caryn Chan", role: "Accounting", ext: "x259", location: "Accounting" },
+      { name: "Kelly Chathle", role: "Accounting", ext: "x256", location: "Accounting" },
+      { name: "Laura Flores", role: "Fiscal", ext: "x217", location: "Fiscal" },
+      { name: "Dharren Magbanua", role: "Fiscal", ext: "x258", location: "Fiscal" },
+      { name: "Carolyn McMahon", role: "Accounting", ext: "x265", location: "Accounting" },
+      { name: "Judy Valdovinos", role: "Accounting", ext: "x233", location: "Accounting" },
+      { name: "Ramya Kalyanaraman", role: "Accounting", ext: "x384", location: "Accounting" },
+      { name: "Sayeda Soliman", role: "Accounting", ext: "x249", location: "Accounting" },
+    ]
+  },
+  {
+    dept: "Purchasing and Warehouse",
+    entries: [
+      { name: "Leigh Hansen", role: "Director of Purchasing and Warehouse", ext: "x332", location: "Purchasing" },
+      { name: "Rosa Valenzuela", role: "Contracts/Bids", ext: "x275", location: "Purchasing" },
+      { name: "Ron Ippolito", role: "Sample Deliveries, Brochures, Orders", ext: "x380", location: "Purchasing" },
+      { name: "Gina Peterson", role: "Credit Card Pickups/Returns", ext: "x262", location: "Purchasing" },
+      { name: "Jason Carpenter", role: "Warehouse", ext: "x250/306", location: "Warehouse" },
+      { name: "Mike Miller", role: "Warehouse", ext: "x260", location: "Warehouse" },
+    ]
+  },
+  {
+    dept: "Facilities and Maintenance",
+    entries: [
+      { name: "Mike Otavka", role: "Director, Facilities", ext: "—", location: "Facilities" },
+      { name: "Carle Manley", role: "Director, Maintenance and Operations", ext: "x324", location: "M&O" },
+      { name: "Laura Best", role: "Admin. Asst., Maintenance", ext: "x321", location: "M&O" },
+      { name: "Maintenance and Ops", role: "Spills, Cleaning, Electrical, Alarms", ext: "x321/323", location: "M&O" },
+      { name: "Marc Bradley", role: "Development Fees, Facility Use", ext: "x286", location: "Facilities" },
+      { name: "Civic Center", role: "Facility Rental", ext: "x445", location: "Facilities" },
+      { name: "Jack Kapp", role: "Sr. Project Manager, Facilities", ext: "x264", location: "Facilities" },
+      { name: "David Cambaliza", role: "M&O", ext: "x247", location: "M&O" },
+      { name: "Jeff Lindstrom", role: "M&O", ext: "x390", location: "M&O" },
+      { name: "Martin Solomon", role: "M&O", ext: "x295", location: "M&O" },
+      { name: "Paloma Corona", role: "Facilities/Transportation", ext: "x247", location: "Facilities/Transportation" },
+      { name: "Joelle Nelson", role: "Facilities", ext: "x390", location: "Facilities" },
+    ]
+  },
+  {
+    dept: "Risk Management",
+    entries: [
+      { name: "Sonia Pishehvar", role: "Director of Risk Management and Safety", ext: "x253", location: "Risk Management" },
+      { name: "Lisa Arnone", role: "Admin. Asst., Risk Management", ext: "x220", location: "HR-Classified" },
+    ]
+  },
+  {
+    dept: "Technology",
+    entries: [
+      { name: "Jordan Meraz", role: "Director, Technology Services", ext: "x293", location: "Technology" },
+      { name: "Tiffany Walusko", role: "Admin. Asst., Technology (IT)", ext: "x283", location: "Technology" },
+      { name: "Technology / IT", role: "Main Line", ext: "x777", location: "Technology" },
+      { name: "Dan Benson", role: "Technology", ext: "x422", location: "Technology" },
+      { name: "Kurt Bradbury", role: "Technology", ext: "x291", location: "Technology" },
+      { name: "Christina Bobby", role: "Technology", ext: "x322", location: "Technology" },
+      { name: "John Luna", role: "Technology", ext: "x292", location: "Technology" },
+      { name: "Alex Munoz", role: "Technology", ext: "x296", location: "Technology" },
+      { name: "Brian Sunde", role: "Technology", ext: "x294", location: "Technology" },
+      { name: "Alicia Ruiz", role: "Technology", ext: "x213", location: "Technology" },
+      { name: "Theresa Morgan", role: "Technology", ext: "x290", location: "Technology" },
+      { name: "Kaitlyn Morris", role: "Technology", ext: "x373", location: "Technology" },
+    ]
+  },
+  {
+    dept: "Transportation",
+    entries: [
+      { name: "Stacey Meyers", role: "Transportation Coordinator — also district vehicle accidents", ext: "x268/339", location: "Transportation" },
+      { name: "Dispatch", role: "Bus Dispatch", ext: "x703/704", location: "Transportation" },
+      { name: "Juan Vasquez", role: "Storer (Contractor) Manager — Hart and Newhall", ext: "x701/707", location: "Facilities/Transportation" },
+    ]
+  },
+  {
+    dept: "Food Services (SODEXO)",
+    entries: [
+      { name: "Shannon Rodgers-Abarca", role: "Free/Reduced Lunch Inquiries", ext: "x239", location: "Accounting" },
+      { name: "FRAM", role: "Free/Reduced Lunch Applications", ext: "x216/217", location: "Food Services" },
+      { name: "Michael Adella", role: "SODEXO", ext: "x753", location: "SODEXO" },
+      { name: "Catherine Cardenas", role: "SODEXO Payroll", ext: "x750/754", location: "SODEXO" },
+      { name: "Dana Chavez", role: "SODEXO", ext: "x752", location: "SODEXO" },
+      { name: "Lindsey Henderson", role: "SODEXO", ext: "x751", location: "SODEXO" },
+    ]
+  },
+  {
+    dept: "SELPA",
+    entries: [
+      { name: "Monika Gylys", role: "SELPA", ext: "x260", location: "SELPA" },
+      { name: "Lisa Nakutin", role: "SELPA", ext: "x742", location: "SELPA" },
+      { name: "Jennifer Dagcuta", role: "SELPA", ext: "x743", location: "SELPA" },
+      { name: "Tracy Peyton-Perry", role: "SELPA", ext: "x742", location: "SELPA" },
+    ]
+  },
+  {
+    dept: "Health Office",
+    entries: [
+      { name: "Michelle Dizon", role: "District Nurse — AS, CA, Bowman/SQ", ext: "—", location: "Health Office" },
+      { name: "Tina Hepp", role: "Dept. Chair, District Nurse — WR, CS", ext: "—", location: "Health Office" },
+      { name: "Jennifer Jenkins", role: "District Nurse — PL/TTC, LP, HA", ext: "—", location: "Health Office" },
+      { name: "Alyssa Thompson", role: "District Nurse — VA", ext: "x1603", location: "Health Office" },
+      { name: "Sarah Morris", role: "District Nurse — SV, GV", ext: "x304", location: "Health Office" },
+      { name: "Tiffany Night", role: "District LVN", ext: "x130", location: "Health Office" },
+    ]
+  },
+];
+
+
+const SCHOOLS = [
+  { name: "Academy of Canyons (AOC)", num: "#62", phone: "362-3056" },
+  { name: "Arroyo Seco Jr. High", num: "#27", phone: "296-0991" },
+  { name: "Bowman High School", num: "#26", phone: "253-4400" },
+  { name: "Castaic High School", num: "#28", phone: "888-6288" },
+  { name: "COC (College of Canyons)", num: "#52", phone: "259-7800" },
+  { name: "Canyon High School", num: "#22", phone: "252-6110" },
+  { name: "Golden Oak", num: "#46", phone: "253-0583" },
+  { name: "Golden Valley High", num: "#48", phone: "298-8140" },
+  { name: "Hart High School", num: "#42", phone: "259-7575" },
+  { name: "La Mesa Jr. High", num: "#56", phone: "250-0022" },
+  { name: "Learning Post Academy", num: "#57", phone: "255-8338" },
+  { name: "Placerita Jr. High", num: "#75", phone: "259-1551" },
+  { name: "Rancho Pico Jr. High", num: "#77", phone: "284-3260" },
+  { name: "Rio Norte Jr. High", num: "#76", phone: "295-3700" },
+  { name: "Saugus High School", num: "#72", phone: "297-3900" },
+  { name: "Sequoia School", num: "—", phone: "ext.650" },
+  { name: "Sierra Vista Jr. High", num: "#78", phone: "252-3113" },
+  { name: "Valencia High School", num: "#82", phone: "294-1188" },
+  { name: "West Ranch High School", num: "#97", phone: "222-1220" },
+];
+
+const PROCEDURES = [
+  {
+    icon: "🌅",
+    title: "Morning Procedures",
+    steps: [
+      { text: "<strong>Start Computer</strong> — Log in. Open Chrome. Log in to Gmail: reception@hartdistrict.org / Cover4me321" },
+      { text: "<strong>Open the Gate</strong> — Press the OPEN button next to the door by the light switch" },
+      { text: "<strong>Set Up Desk</strong> — Place the sign-in sheet on the counter" },
+      { text: "<strong>Turn Off Call Forwarding</strong> — Press Forward Off on the phone" },
+    ]
+  },
+  {
+    icon: "🍽️",
+    title: "Lunch Break (12:00 PM – 1:00 PM)",
+    steps: [
+      { text: "<strong>Coverage</strong> — Angelica will typically cover your break" },
+      { text: "<strong>Left Button</strong> (under counter, left corner) — Opens doors to back lobby (press & release)" },
+      { text: "<strong>Right Button</strong> — Opens HR door (press and hold)" },
+    ]
+  },
+  {
+    icon: "🌙",
+    title: "End-of-Day Procedures",
+    steps: [
+      { text: "<strong>Sign-In Sheet</strong> — Place clipboard next to file holder. If covering multiple days, file the sheet and set up a blank one." },
+      { text: "<strong>Shut Down</strong> — Turn off computer. Close the gate (press CLOSE button)." },
+      { text: "<strong>Call Forwarding</strong> — Press Forward All, then Voicemail Button to forward calls overnight." },
+    ]
+  },
+  {
+    icon: "📞",
+    title: "Phone Functions",
+    steps: [
+      { text: "<strong>Transfer Call</strong> — Press [Transfer Button], enter extension (no #), press Transfer again" },
+      { text: "<strong>External Transfer</strong> — Use # to transfer to school sites, elementary districts, or emergency extensions" },
+      { text: "<strong>Hold</strong> — Press [Hold Button]" },
+      { text: "<strong>Switch Between Calls</strong> — Use arrow buttons" },
+    ]
+  },
+  {
+    icon: "🚪",
+    title: "Visitor Check-In (SafeVisitor)",
+    steps: [
+      { text: "Greet: <strong>'How may I help you?'</strong> — Ask for ID" },
+      { text: "Log in to SafeVisitor: reception@hartdistrict.org / Hartdistrict2" },
+      { text: "Click <strong>Check In</strong> → scan back of driver's license (2D barcode)" },
+      { text: "Take photo → Select Reason & Person Visiting → Allow & Print Badge" },
+      { text: "<strong>District employees</strong> — Do NOT need badge. Have them sign the clipboard." },
+      { text: "<strong>Do NOT let anyone into Special Ed dept</strong> unless explicitly authorized" },
+    ]
+  },
+  {
+    icon: "📦",
+    title: "Mail & Packages",
+    steps: [
+      { text: "<strong>Unaddressed Mail</strong> — Place in yellow interdepartmental folder (top drawer near printer)" },
+      { text: "<strong>UPS/FedEx</strong> — Drop off next to double doors leading to back lobby" },
+      { text: "<strong>Sodexo packages</strong> — Call Lindsey x751 or Dana x752" },
+      { text: "<strong>Sodexo Payroll</strong> (red/gray plastic UPS pkg) — Contact Catherine Cardenas x754/750" },
+      { text: "<strong>CCR Packages</strong> — Email Claudia Balouzian" },
+    ]
+  },
+  {
+    icon: "⚖️",
+    title: "Subpoenas / Summons",
+    steps: [
+      { text: "<strong>DO NOT</strong> accept or sign any subpoena or summons" },
+      { text: "<strong>Employee records</strong> — Contact Kristiana Molina x278" },
+      { text: "<strong>Student records</strong> — Contact Stephanie Migdol x203" },
+      { text: "If no one available — inform delivery person they may leave it at counter; you will notify" },
+      { text: "<strong>Log it</strong> on the tracker sheet in the labeled filing cabinet" },
+    ]
+  },
+  {
+    icon: "✅",
+    title: "Check Pick-Up",
+    steps: [
+      { text: "<strong>Verify ID</strong> before releasing any check" },
+      { text: "Have them sign the <strong>Paycheck/Paystub form</strong> in the wall-mounted file holder" },
+    ]
+  },
+];
+
+// =============================================
+// BUILD UI
+// =============================================
+
+function buildInquiryGrid() {
+  const grid = document.getElementById('inquiryGrid');
+  grid.innerHTML = INQUIRIES.map((item, i) => `
+    <div class="inquiry-card" onclick="openModal(${i})">
+      <div class="ic-topic">${item.topic}</div>
+      <div class="ic-contact">${item.contact}</div>
+      <span class="ic-ext">${item.ext}</span>
+    </div>
+  `).join('');
+}
+
+function buildDirectory() {
+  const grid = document.getElementById('directoryGrid');
+  grid.innerHTML = DIRECTORY.map(dept => `
+    <div class="dept-card">
+      <div class="dept-header">${dept.dept}</div>
+      <div class="dept-entries">
+        ${dept.entries.map(e => `
+          <div class="dept-entry">
+            <div class="de-info">
+              <div class="de-name">${e.name}</div>
+              <div class="de-role">${e.role}</div>
+              ${e.location ? `<div class="de-role" style="color:var(--gold);font-size:0.72rem">📍 ${e.location}</div>` : ''}
+            </div>
+            <span class="de-ext">${e.ext}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildSchools() {
+  const grid = document.getElementById('sitesGrid');
+  grid.innerHTML = SCHOOLS.map(s => `
+    <div class="site-card">
+      <div>
+        <div class="site-name">${s.name}</div>
+        <div class="site-num">${s.num}</div>
+      </div>
+      <div class="site-phone">${s.phone}</div>
+    </div>
+  `).join('');
+}
+
+function buildProcedures() {
+  const grid = document.getElementById('procGrid');
+  grid.innerHTML = PROCEDURES.map(p => `
+    <div class="proc-card">
+      <div class="proc-header">
+        <span class="proc-icon">${p.icon}</span>
+        <span class="proc-title">${p.title}</span>
+      </div>
+      <div class="proc-steps">
+        ${p.steps.map((s, i) => `
+          <div class="proc-step">
+            <span class="step-num">${i+1}</span>
+            <span class="step-text">${s.text}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// =============================================
+// MODAL
+// =============================================
+
+function openModal(i) {
+  const item = INQUIRIES[i];
+  const content = document.getElementById('modalContent');
+  content.innerHTML = `
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-tag">${item.dept}</div>
+    <div class="modal-title">${item.topic}</div>
+    <span class="modal-ext-big">${item.ext}</span>
+    <div class="modal-divider"></div>
+    <div class="modal-row">
+      <span class="modal-row-label">Contact Person</span>
+      <span class="modal-row-value">${item.contact}</span>
+    </div>
+    <div class="modal-row">
+      <span class="modal-row-label">Department</span>
+      <span class="modal-row-value">${item.dept}</span>
+    </div>
+    ${item.script ? `
+    <div class="modal-script">
+      <strong>📢 What to Say</strong>
+      "${item.script}"
+    </div>` : ''}
+    ${item.notes ? `
+    <div class="modal-notes">
+      <strong>📝 Notes</strong>
+      ${item.notes}
+    </div>` : ''}
+  `;
+  document.getElementById('modalOverlay').classList.add('visible');
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('visible');
+  }
+}
+
+// =============================================
+// SEARCH
+// =============================================
+
+const SEARCH_DATA = [];
+INQUIRIES.forEach((item, i) => {
+  SEARCH_DATA.push({
+    label: item.topic,
+    sub: item.dept,
+    ext: item.ext,
+    type: 'inquiry',
+    index: i
+  });
+});
+DIRECTORY.forEach(dept => {
+  dept.entries.forEach(e => {
+    SEARCH_DATA.push({
+      label: e.name,
+      sub: e.role + ' — ' + dept.dept,
+      ext: e.ext,
+      type: 'directory',
+      index: null
+    });
+  });
+});
+
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+
+let lastHits = [];
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) {
+    searchResults.classList.remove('visible');
+    return;
+  }
+  lastHits = SEARCH_DATA.filter(d =>
+    d.label.toLowerCase().includes(q) ||
+    d.sub.toLowerCase().includes(q) ||
+    (d.ext && d.ext.toLowerCase().includes(q))
+  ).slice(0, 8);
+
+  if (!lastHits.length) {
+    searchResults.innerHTML = `
+      <div class="search-result-item" style="cursor:default;">
+        <div class="sri-left">
+          <div class="sri-topic" style="color:var(--gray)">No results found for "${searchInput.value.trim()}"</div>
+          <div class="sri-dept">Try the 🤔 Not Sure? tab for guided help</div>
+        </div>
+      </div>`;
+    searchResults.classList.add('visible');
+    return;
+  }
+
+  searchResults.innerHTML = lastHits.map((h, i) => `
+    <div class="search-result-item" onclick="handleSearchClick(${i})">
+      <div class="sri-left">
+        <div class="sri-topic">${h.label}</div>
+        <div class="sri-dept">${h.sub}</div>
+      </div>
+      <span class="sri-ext">${h.ext}</span>
+    </div>
+  `).join('');
+  searchResults.classList.add('visible');
+});
+
+function handleSearchClick(i) {
+  const h = lastHits[i];
+  if (!h) return;
+  searchResults.classList.remove('visible');
+  searchInput.value = '';
+  const allTabs = document.querySelectorAll('.tab');
+  const allPanels = document.querySelectorAll('.tab-panel');
+  const names = ['quickboard','helper','directory','schools','procedures','rights'];
+  allTabs.forEach(t => t.classList.remove('active'));
+  allPanels.forEach(p => p.classList.remove('active'));
+  if (h.type === 'inquiry' && h.index !== null) {
+    allTabs[0].classList.add('active');
+    document.getElementById('tab-quickboard').classList.add('active');
+    setTimeout(() => openModal(h.index), 100);
+  } else if (h.type === 'rights') {
+    allTabs[5].classList.add('active');
+    document.getElementById('tab-rights').classList.add('active');
+    setTimeout(() => {
+      const cards = document.querySelectorAll('.rights-card');
+      if (cards[h.index]) {
+        cards[h.index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cards[h.index].style.border = '2px solid var(--gold)';
+        setTimeout(() => { cards[h.index].style.border = ''; }, 2000);
+      }
+    }, 150);
+  } else {
+    allTabs[2].classList.add('active');
+    document.getElementById('tab-directory').classList.add('active');
+  }
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrapper')) {
+    searchResults.classList.remove('visible');
+  }
+});
+
+// =============================================
+// TABS
+// =============================================
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// Tab click without event on direct call
+document.querySelectorAll('.tab').forEach((tab, i) => {
+  const names = ['quickboard','helper','directory','schools','procedures','rights'];
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('tab-' + names[i]).classList.add('active');
+  });
+});
+
+// =============================================
+// DECISION HELPER
+// =============================================
+
+const HELPER_TREE = {
+  id: 'start',
+  question: "Who is calling?",
+  sub: "Start by identifying the caller type",
+  script: '"May I ask, are you a parent, a student, or a district employee?"',
+  options: [
+    {
+      label: "👨‍👩‍👧 Parent / Guardian",
+      next: {
+        id: 'parent',
+        question: "What is the parent calling about?",
+        sub: "Ask to narrow it down",
+        script: '"Could you tell me a little more about what the letter or matter is regarding — is it about your child\'s school, enrollment, or something else?"',
+        options: [
+          {
+            label: "📬 Didn't receive a letter",
+            next: {
+              id: 'parent-letter',
+              question: "What kind of letter?",
+              sub: "Try to identify the subject",
+              script: '"Do you have any idea what department the letter may have come from — school enrollment, transfers, or perhaps a district program?"',
+              options: [
+                { label: "Enrollment / Transfer", result: { name: "Joanna Terrazas", ext: "x212", dept: "Student Services", say: "I'll connect you with our Student Services team. They handle enrollment and transfer correspondence.", note: "Joanna handles student records, enrollment, and all transfer matters." } },
+                { label: "Special Education / IEP", result: { name: "Susie Edwards", ext: "x223", dept: "Special Education", say: "I'll transfer you to our Special Education department.", note: "If Susie is unavailable, try Meena at x377." } },
+                { label: "Free / Reduced Lunch", result: { name: "Shannon Abarca / FRAM", ext: "x269 / x216", dept: "Food Services", say: "I'll connect you with our Food Services team.", note: "Can also email foodservice@hartdistrict.org" } },
+                { label: "School Zone / Attendance", result: { name: "Joanna Terrazas", ext: "x212", dept: "Student Services", say: "I'll transfer you to Student Services — they handle school zone and attendance boundary inquiries.", note: "Parents can also check hartdistrict.org > Schools > Attendance Boundaries." } },
+                { label: "She truly doesn't know", result: { name: "Kristiana Molina", ext: "x278", dept: "HR / General", say: "I completely understand. Let me take your name and number and have the right person call you back. May I have your name please?", note: "Take the caller's name and number. Then notify Kristiana Molina x278 or Joanna Terrazas x212 depending on whether it sounds like an HR or student matter." } },
+              ]
+            }
+          },
+          { label: "🏫 Summer School", result: { name: "Carolyn Hoffman", ext: "x228", dept: "CTE-CCR", say: "I will transfer you to Carolyn Hoffman for summer school inquiries.", note: "All summer school calls go to Carolyn Hoffman x228. Staff summer school assignments → Kelly Csulak x276. Summer sports → Michelle Craig x417." } },
+          {
+            label: "🔄 Transfer / Enrollment",
+            next: {
+              id: 'parent-transfer',
+              question: "What type of transfer?",
+              sub: "",
+              script: '"Are you looking to transfer your child within the Hart District, from another district, or out of Hart?"',
+              options: [
+                { label: "Into Hart from another district", result: { name: "Joanna Terrazas", ext: "x212", dept: "Student Services", say: "I'll connect you with Student Services to help with transferring into the Hart District.", note: "Parent must first get a release from their local district." } },
+                { label: "Within Hart (Intra-District)", result: { name: "School Site Registrar", ext: "—", dept: "Student Services", say: "For transfers within the Hart District, please contact the registrar at your attendance boundary school, or apply at hartdistrict.org > Schools > Intra-District Transfer.", note: "Application window: mid-February/March." } },
+                { label: "Out of Hart to another district", result: { name: "Joanna Terrazas", ext: "x212", dept: "Student Services", say: "I'll connect you with Student Services. They'll walk you through the Inter-District Transfer process.", note: "Parent must fill out the Inter-District Transfer form. Can email studentservices@hartdistrict.org." } },
+              ]
+            }
+          },
+          { label: "⚖️ Transfer Appeal (Denied)", result: { name: "Student Services — Joanna Terrazas", ext: "x212", dept: "Student Services", say: "I'll connect you with our Student Services department. They will be able to assist you with your transfer appeal.", note: "Joanna Terrazas x212 is the first contact. Sal Frias x210/212 handles formal appeals at district level if needed." } },
+          { label: "📋 IEP / Special Ed", result: { name: "Susie Edwards", ext: "x223", dept: "Special Education", say: "I'll transfer you to our Special Education department.", note: "If unavailable → Meena x377. Do NOT allow anyone into SpEd dept without authorization." } },
+        ]
+      }
+    },
+    {
+      label: "🎓 Student",
+      next: {
+        id: 'student',
+        question: "What does the student need?",
+        sub: "",
+        script: '"How can I help you today?"',
+        options: [
+          { label: "📄 Work Permit", result: { name: "Nancy", ext: "x232", dept: "Student Services", say: "I'll transfer you to Nancy for work permit assistance.", note: "During school breaks: Jessica Martinez x365 or Claudia Balouzian x222." } },
+          { label: "📝 Transcripts", result: { name: "Stephanie Migdol / School Registrar", ext: "x203", dept: "Student Services", say: "Transcripts need to be requested from the registrar at the school site where you're enrolled or previously attended. I can also connect you with Stephanie at x203.", note: "Albert Einstein K-6 → Acton Agua Dulce SD: (661) 269-0750." } },
+          { label: "🎓 SAT / PSAT / Testing", result: { name: "School Site", ext: "—", dept: "Testing", say: "For SAT and PSAT questions, please contact your school site directly, or reach out to the College Board.", note: "SAT/College Application Waivers: email foodservice@hartdistrict.org with student name, ID, school site." } },
+          { label: "🏫 General / Doesn't know", result: { name: "Joanna Terrazas", ext: "x212", dept: "Student Services", say: "Let me connect you with our Student Services team — they'll point you in the right direction.", note: "" } },
+        ]
+      }
+    },
+    {
+      label: "👔 District Employee",
+      next: {
+        id: 'employee',
+        question: "What is the employee calling about?",
+        sub: "",
+        script: '"Could you tell me what the matter is regarding — payroll, benefits, HR, or something else?"',
+        options: [
+          {
+            label: "💰 Payroll / Paycheck",
+            next: {
+              id: 'payroll',
+              question: "What type of employee?",
+              sub: "",
+              script: '"Are you certificated (teacher/counselor) or classified (support staff)?"',
+              options: [
+                { label: "Certificated", result: { name: "Brandy", ext: "x255", dept: "Payroll", say: "I'll transfer you to our Certificated Payroll team.", note: "Certificated payroll distribution: 1st and 30th of the month." } },
+                { label: "Classified", result: { name: "Armineh", ext: "x261", dept: "Payroll", say: "I'll connect you with our Classified Payroll team.", note: "Classified payroll: 10th & 25th of the month. Coaches: 5th of the month." } },
+                { label: "Not sure", result: { name: "Veronica Reyes-Cruz", ext: "x270", dept: "Payroll", say: "I'll transfer you to our Payroll Supervisor.", note: "Veronica Reyes-Cruz is the Accounting/Payroll Supervisor." } },
+              ]
+            }
+          },
+          { label: "🏥 Benefits (Health/Dental)", result: { name: "Melissa Hernandez", ext: "x267", dept: "HR — Benefits", say: "I'll transfer you to our Benefits department.", note: "Handles both Certificated and Classified employee benefits." } },
+          {
+            label: "📬 Didn't receive a letter",
+            next: {
+              id: 'employee-letter',
+              question: "What might the letter be about?",
+              sub: "",
+              script: '"Do you have any idea what it may have been regarding — your pay, benefits, employment status, or something from HR?"',
+              options: [
+                { label: "Pay / Paycheck related", result: { name: "Veronica Reyes-Cruz", ext: "x270", dept: "Payroll", say: "I'll connect you with our Payroll department.", note: "" } },
+                { label: "Benefits related", result: { name: "Melissa Hernandez", ext: "x267", dept: "HR — Benefits", say: "I'll transfer you to our Benefits team.", note: "" } },
+                { label: "HR / Employment related", result: { name: "Kristiana Molina", ext: "x278", dept: "HR", say: "I'll connect you with Human Resources.", note: "Kristiana handles general HR matters for the Deputy Superintendent's office." } },
+                { label: "Truly doesn't know", result: { name: "Kristiana Molina", ext: "x278", dept: "HR", say: "I understand. Let me take your name and number and have someone from our HR team follow up with you. May I have your name?", note: "Take name & number. Notify Kristiana Molina x278." } },
+              ]
+            }
+          },
+          { label: "📋 Leave / FMLA / Unemployment", result: { name: "Sondra Celaya", ext: "x251", dept: "HR", say: "I'll transfer you to our HR Specialist for leave and unemployment matters.", note: "Sondra handles FMLA, Exigency Leave, Reasonable Assurance, Unemployment Claims." } },
+          { label: "🩺 TB Test",
+            next: {
+              id: 'tb-test',
+              question: "What type of employee?",
+              sub: "",
+              script: '"Are you certificated (teacher/counselor) or classified (support staff)?"',
+              options: [
+                { label: "Certificated (teacher, counselor)", result: { name: "Mignon Stevenson", ext: "x282", dept: "HR — Certificated", say: "I'll transfer you to our Certificated HR team for TB testing information.", note: "Mignon Stevenson handles TB testing for certificated staff." } },
+                { label: "Classified (support staff, aide, sub)", result: { name: "Lisa Arnone", ext: "x220", dept: "HR — Classified", say: "I'll transfer you to our Classified HR team for TB testing information.", note: "Lisa Arnone handles TB testing for classified staff." } },
+              ]
+            }
+          },
+          { label: "🏅 Badges / SmartFind", 
+            next: {
+              id: 'badges-smartfind',
+              question: "Is this about Badges or SmartFind?",
+              sub: "",
+              script: '"Are you calling about your employee badge, or about the SmartFind system?"',
+              options: [
+                { label: "🪪 Badge", result: { name: "Angelica Mendez", ext: "x410", dept: "HR — Classified", say: "I'll transfer you to Angelica for badge assistance.", note: "Coach/Volunteer badges → Michelle Craig x417." } },
+                { label: "💻 SmartFind — Technical (can't log in, app error)", result: { name: "Technology / IT", ext: "x777", dept: "Technology", say: "I'll transfer you to our Technology department for SmartFind technical support.", note: "x777 is for technical issues only — login problems, app errors, system not working." } },
+                { label: "📋 SmartFind — Assignments / Eligibility", result: { name: "Angelica Mendez", ext: "x410", dept: "HR — Classified", say: "I'll connect you with Angelica in HR for SmartFind assignment assistance.", note: "Angelica handles sub placements, eligibility, and how SmartFind works. Tech issues → x777." } },
+              ]
+            }
+          },
+        ]
+      }
+    },
+    {
+      label: "🏢 Vendor / Other",
+      next: {
+        id: 'vendor',
+        question: "What is the vendor or caller inquiring about?",
+        sub: "",
+        script: '"How may I direct your call?"',
+        options: [
+          { label: "📦 Delivery / Order", result: { name: "Ron Ippolito", ext: "x380", dept: "Purchasing", say: "I'll transfer you to our Purchasing department.", note: "" } },
+          { label: "📄 Contracts / Bids", result: { name: "Rosa Valenzuela", ext: "x275", dept: "Purchasing", say: "I'll connect you with our Contracts team.", note: "" } },
+          { label: "🏢 Facility Rental", result: { name: "Civic Center", ext: "x445", dept: "Facilities", say: "I'll transfer you to our Civic Center team for facility rental.", note: "" } },
+          { label: "📢 Media / Press", result: { name: "Debbie Dunn", ext: "x206", dept: "Communications", say: "I'll transfer you to our Communications department.", note: "" } },
+          { label: "🌀 Other / General", result: { name: "Kristiana Molina", ext: "x278", dept: "HR — General Assistance", say: "Let me take your name and the best number to reach you, and I'll make sure the right person follows up.", note: "When in doubt, Kristiana Molina x278 is your general escalation point." } },
+        ]
+      }
+    },
+  ]
+};
+
+let helperHistory = [];
+let helperCurrent = HELPER_TREE;
+
+function renderHelper() {
+  const container = document.getElementById('helperFlow');
+  if (!container) return;
+  container.innerHTML = '';
+
+  helperHistory.forEach((step) => {
+    const div = document.createElement('div');
+    div.className = 'helper-step';
+    div.style.opacity = '0.5';
+    div.innerHTML = `
+      <div class="helper-question" style="font-size:0.95rem">${step.question}</div>
+      <div class="helper-options" style="margin-top:0.5rem">
+        <span class="helper-btn selected">${step.chosen}</span>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  if (helperCurrent.result) {
+    const r = helperCurrent.result;
+    const div = document.createElement('div');
+    div.className = 'helper-result';
+    div.innerHTML = `
+      <div class="helper-result-title">✅ Transfer To</div>
+      <div class="helper-result-name">${r.name}</div>
+      <span class="helper-result-ext">${r.ext}</span>
+      <div style="font-size:0.8rem;color:var(--gray);margin-bottom:0.3rem">${r.dept}</div>
+      <div class="helper-result-say">"${r.say}"</div>
+      ${r.note ? `<div class="helper-result-note">📝 ${r.note}</div>` : ''}
+      <button class="helper-reset" onclick="resetHelper()">↩ Start Over</button>
+    `;
+    container.appendChild(div);
+  } else {
+    const div = document.createElement('div');
+    div.className = 'helper-step';
+    div.innerHTML = `
+      <div class="helper-question">${helperCurrent.question}</div>
+      ${helperCurrent.sub ? `<div class="helper-sub">${helperCurrent.sub}</div>` : ''}
+      ${helperCurrent.script ? `<div class="helper-script">${helperCurrent.script}</div>` : ''}
+      <div class="helper-options">
+        ${helperCurrent.options.map((opt, i) => `
+          <button class="helper-btn" onclick="helperChoose(${i})">${opt.label}</button>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(div);
+    if (helperHistory.length > 0) {
+      const reset = document.createElement('button');
+      reset.className = 'helper-reset';
+      reset.textContent = '↩ Start Over';
+      reset.onclick = resetHelper;
+      container.appendChild(reset);
+    }
+  }
+}
+
+function helperChoose(optionIndex) {
+  const option = helperCurrent.options[optionIndex];
+  helperHistory.push({ question: helperCurrent.question, chosen: option.label });
+  helperCurrent = option.result ? { result: option.result } : option.next;
+  renderHelper();
+}
+
+function resetHelper() {
+  helperHistory = [];
+  helperCurrent = HELPER_TREE;
+  renderHelper();
+}
+
+renderHelper();
+
+// =============================================
+// CA RIGHTS DATA
+// =============================================
+
+const CA_RIGHTS = [
+  {
+    icon: "🛡️",
+    title: "Worker Rights — General",
+    tags: ["rights", "worker", "california", "retaliation", "immigration"],
+    content: "Labor laws apply to ALL workers in California regardless of immigration status. It is illegal for your employer to retaliate against you for exercising your rights — including filing a complaint, asking about compliance with laws, or talking with others about their rights. Illegal retaliation includes firing you, reducing hours, or threatening to report you to immigration authorities."
+  },
+  {
+    icon: "🔍",
+    title: "Immigration Inspections — Your Right to Notice",
+    tags: ["immigration", "inspection", "i-9", "notice", "72 hours"],
+    content: "If your employer receives notice of an upcoming immigration inspection of I-9 forms or other employment records, they must post a notice informing workers within 72 hours of receiving that notice. (Labor Code Section 90.2)"
+  },
+  {
+    icon: "📋",
+    title: "Protections Against Immigration-Related Practices",
+    tags: ["immigration", "e-verify", "retaliation", "i-9", "unfair"],
+    content: "Under California law, employers cannot: refuse to accept genuine ID documents during I-9 process, misuse E-Verify, report or threaten to report you or your family to immigration authorities, or file false reports to police or government agencies because you exercised your rights. (Labor Code Sections 1019-1019.2)"
+  },
+  {
+    icon: "📞",
+    title: "Right to Designate an Emergency Contact",
+    tags: ["emergency contact", "arrested", "detained", "immigration"],
+    content: "Your employer must allow you to provide emergency contact information and indicate if you want that contact notified if you are arrested or detained at work. If you are arrested at work and your employer has knowledge of it, they must notify your designated emergency contact. (Labor Code Section 1555)"
+  },
+  {
+    icon: "✊",
+    title: "Right to Organize a Union",
+    tags: ["union", "organize", "collective bargaining", "protected activity", "working conditions"],
+    content: "Most California employees have the right to organize, join, or participate in union activities. You can join with coworkers to request better conditions or raise work-related concerns about wages, hours, health and safety. You also have the right NOT to participate. It is illegal for your employer to interfere with, threaten, or retaliate against you for union or protected activities."
+  },
+  {
+    icon: "🚔",
+    title: "Rights When Law Enforcement Enters the Workplace",
+    tags: ["law enforcement", "ice", "immigration agent", "search", "warrant", "police"],
+    content: "Law enforcement can enter PUBLIC areas (lobby, waiting room, parking lot) without a warrant. They need a judicial warrant signed by a judge to enter NON-PUBLIC areas (breakroom, employee restroom, workspace, employees-only areas). Your employer CANNOT give voluntary consent for immigration enforcement to enter non-public areas. Administrative forms like I-200 or I-205 are NOT judicial warrants."
+  },
+  {
+    icon: "🔎",
+    title: "Right to Be Free From Unreasonable Searches",
+    tags: ["search", "warrant", "belongings", "4th amendment", "immigration"],
+    content: "If law enforcement asks to search you or your belongings, you have the right to say no UNLESS they have a judicial warrant specifically authorizing the search. If they conduct the search anyway — remain calm, do not physically resist, and do not run. (U.S. Constitution, 4th Amendment)"
+  },
+  {
+    icon: "🚶",
+    title: "Right to Be Free From Unreasonable Seizures",
+    tags: ["detained", "arrested", "seizure", "4th amendment", "stop", "question"],
+    content: "You are protected against unreasonable detention or arrest. Law enforcement must have reasonable suspicion before stopping and questioning you. You can ask: Am I being detained? or Am I free to leave? If not detained, you can walk away calmly. An arrest requires probable cause. You have the right to speak to a lawyer if arrested. You do NOT have to sign anything without speaking to an attorney."
+  },
+  {
+    icon: "🤐",
+    title: "Right to Remain Silent",
+    tags: ["silent", "5th amendment", "immigration status", "attorney", "lawyer"],
+    content: "Anything you say to law enforcement can be used against you in court. You have the right to remain silent, even if asked about your immigration status. Clearly state you wish to remain silent and request an attorney. Do NOT provide false information, false ID, or false documents — this is a federal offense with severe immigration consequences."
+  },
+  {
+    icon: "📹",
+    title: "Right to Record Law Enforcement",
+    tags: ["record", "film", "video", "1st amendment", "officer", "public"],
+    content: "The public has the right to observe and record officers and government officials carrying out duties in public. If you record, stand a safe distance away and do not interfere with the officer. Physical obstruction or verbal escalation can put your safety at risk and may lead to criminal charges."
+  },
+  {
+    icon: "⚖️",
+    title: "Access to Legal Representation",
+    tags: ["lawyer", "attorney", "arrested", "ice", "cbp", "legal help"],
+    content: "If arrested, you have the right to an attorney. If you cannot afford one, you can get a government-appointed attorney for a criminal case. If arrested by ICE or CBP for civil immigration violations, the government is NOT required to provide a lawyer, but you have the right to consult one before saying or signing anything. You can also ask to speak to your consulate."
+  },
+  {
+    icon: "🏥",
+    title: "Workers Compensation",
+    tags: ["workers comp", "injury", "accident", "ill", "job injury", "medical"],
+    content: "You have the right to workers compensation benefits if injured or ill because of your job. Benefits include medical care, partial wage replacement while recovering, and help returning to work. Contact: Lisa Arnone at x220 (Classified) or Kristiana Molina at x278 (Certificated). For general info: www.dir.ca.gov/dwc or call 1-800-736-7401."
+  },
+  {
+    icon: "📬",
+    title: "Who to Contact If Your Rights Are Violated",
+    tags: ["rights violated", "complaint", "labor commissioner", "cal osha", "civil rights", "help"],
+    content: "CA Labor Commissioner (LCO): (833) 526-4636 — Immigration helpline: (855) 526-7775. Cal/OSHA: (833) 579-0927. CA Division of Workers Compensation: (800) 736-7401. CA Attorney General: (800) 952-5225. CA Civil Rights Department: (800) 884-1684. National Labor Relations Board (NLRB): (844) 762-6572."
+  },
+];
+
+function buildRights() {
+  const grid = document.getElementById('rightsGrid');
+  if (!grid) return;
+  grid.innerHTML = CA_RIGHTS.map(r => `
+    <div class="rights-card">
+      <div class="rights-header">${r.icon} ${r.title}</div>
+      <div class="rights-body">
+        ${r.content}
+        <div style="margin-top:0.6rem">
+          ${r.tags.map(t => `<span class="rights-tag">${t}</span>`).join(' ')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// =============================================
+// CLOCK
+// =============================================
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// =============================================
+// INIT
+// =============================================
+buildInquiryGrid();
+buildDirectory();
+buildSchools();
+buildProcedures();
+buildRights();
+
+// Add CA Rights to search data
+CA_RIGHTS.forEach((r, i) => {
+  SEARCH_DATA.push({
+    label: r.title,
+    sub: r.tags.join(', '),
+    ext: '⚖️ CA Rights',
+    type: 'rights',
+    index: i
+  });
+});
+// =============================================
+// PWA — INSTALL AS APP SUPPORT
+// =============================================
+
+// Build the app manifest inline and inject it
+const manifest = {
+  name: "Hart District Smart Receptionist",
+  short_name: "Hart Receptionist",
+  description: "Hart District call routing and directory tool",
+  start_url: ".",
+  display: "standalone",
+  background_color: "#0a1628",
+  theme_color: "#0a1628",
+  orientation: "any",
+  icons: [
+    {
+      src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230a1628'/%3E%3Crect x='0' y='380' width='512' height='132' rx='0' fill='%23112240'/%3E%3Ctext y='320' x='256' text-anchor='middle' font-size='260' font-family='serif'%3E%F0%9F%8E%93%3C/text%3E%3Ctext y='470' x='256' text-anchor='middle' font-size='72' fill='%23c8a84b' font-family='Arial,sans-serif' font-weight='bold' letter-spacing='8'%3EHART%3C/text%3E%3C/svg%3E",
+      sizes: "512x512",
+      type: "image/svg+xml",
+      purpose: "any maskable"
+    }
+  ]
+};
+
+// Inject manifest as blob URL
+const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+const manifestURL = URL.createObjectURL(manifestBlob);
+document.getElementById('manifest-placeholder').setAttribute('href', manifestURL);
+
+// Register service worker inline using a blob
+const swCode = `
+const CACHE = 'hart-receptionist-v1';
+self.addEventListener('install', e => {
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(clients.claim());
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+});
+`;
+
+if ('serviceWorker' in navigator) {
+  const swBlob = new Blob([swCode], { type: 'application/javascript' });
+  const swURL = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL, { scope: '/' }).catch(() => {
+    // Service worker registration failed silently - app still works normally
+  });
+}
+
+// Show install prompt when available
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+function showInstallBanner() {
+  const banner = document.createElement('div');
+  banner.id = 'install-banner';
+  banner.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #112240;
+    border: 1.5px solid #c8a84b;
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 9999;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    animation: slideUp 0.3s ease;
+    max-width: 320px;
+  `;
+  banner.innerHTML = `
+    <span style="font-size:1.6rem">📲</span>
+    <div style="flex:1">
+      <div style="font-weight:700;font-size:0.9rem;color:#f8f6f1">Install as App</div>
+      <div style="font-size:0.78rem;color:#8a9ab5;margin-top:2px">Click to install on this computer</div>
+    </div>
+    <button onclick="installApp()" style="background:#c8a84b;color:#0a1628;border:none;border-radius:8px;padding:6px 14px;font-weight:800;font-size:0.82rem;cursor:pointer;">Install</button>
+    <button onclick="document.getElementById('install-banner').remove()" style="background:transparent;border:none;color:#8a9ab5;cursor:pointer;font-size:1.1rem;padding:2px 4px;">✕</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      const banner = document.getElementById('install-banner');
+      if (banner) banner.remove();
+    });
+  }
+}
+
+window.addEventListener('appinstalled', () => {
+  const banner = document.getElementById('install-banner');
+  if (banner) banner.remove();
+});
+</script>
+</body>
+</html>
