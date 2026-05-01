@@ -1336,7 +1336,7 @@ window.addEventListener('load', function() {
     <div class="inquiry-card" onclick="openModal(23)">
       <div class="ic-topic">Transfers Within Hart (Intra-District)</div>
       <div class="ic-contact">School Site Registrar</div>
-      <span class="ic-ext">—</span>
+      <span class="ic-ext">School Site</span>
     </div>
   
     <div class="inquiry-card" onclick="openModal(24)">
@@ -2330,7 +2330,7 @@ window.addEventListener('load', function() {
               <div class="de-name">Shannon Rodgers-Abarca</div>
               <div class="de-role">Accounting Technician III — ASBs / Free-Reduced Lunch</div>
               <div class="de-role" style="color:var(--gold);font-size:0.72rem">📍 Accounting</div>
-              <div class="de-role" style="color:#7ab8e8;font-size:0.72rem">✉️ sabarca@hartdistrict.org</div>
+              <div class="de-role" style="color:#7ab8e8;font-size:0.72rem">✉️ x269"</div>
             </div>
             <span class="de-ext">x239</span>
           </div>
@@ -3299,7 +3299,7 @@ window.addEventListener('load', function() {
             <div class="de-info">
               <div class="de-name">Michelle Dizon</div>
               <div class="de-role">District Nurse (Dept Chair) — SA Office, AS, CA, BO, SQ</div>
-              <div class="de-role" style="color:var(--gold);font-size:0.72rem">📍 Saugus SA</div>
+              <div class="de-role" style="color:var(--gold);font-size:0.72rem">📍 Saugus SA — Health Office</div>
               <div class="de-role" style="color:#7ab8e8;font-size:0.72rem">✉️ mdizon@hartdistrict.org</div>
             </div>
             <span class="de-ext">x3169</span>
@@ -3406,16 +3406,6 @@ window.addEventListener('load', function() {
     <div class="dept-card">
       <div class="dept-header">Health Office</div>
       <div class="dept-entries">
-        
-          <div class="dept-entry">
-            <div class="de-info">
-              <div class="de-name">Michelle Dizon</div>
-              <div class="de-role">District Nurse — AS, CA, Bowman/SQ</div>
-              <div class="de-role" style="color:var(--gold);font-size:0.72rem">📍 Health Office</div>
-              
-            </div>
-            <span class="de-ext">—</span>
-          </div>
         
           <div class="dept-entry">
             <div class="de-info">
@@ -4503,10 +4493,10 @@ const INQUIRIES = [
   {
     topic: "Transfers Within Hart (Intra-District)",
     contact: "School Site Registrar",
-    ext: "—",
-    dept: "Student Services",
+    ext: "School Site",
+    dept: "Student Services — x212",
     script: "For transfers within the Hart District, please contact the registrar at your attendance boundary school. You can also apply online at hartdistrict.org — go to Schools > Intra-District Transfer.",
-    notes: "Application window opens mid-February/March. Appeals go to the Principal of the school of residence."
+    notes: "District contact: Joanna Terrazas x212 (Student Services). Application window opens mid-February/March. Appeals go to the Principal of the school of residence."
   },
   {
     topic: "Appeal for IDTs",
@@ -4715,21 +4705,21 @@ const DIRECTORY = [
     dept: "Superintendent's Office",
     entries: [
       { name: "Michael Vierra", role: "Superintendent", ext: "x201", location: "Superintendent" },
-      { name: "Erica Galicia", role: "Exec. Admin. Assistant", ext: "x209", location: "Superintendent" },
-      { name: "Rheeza McMillan", role: "Admin. Assistant", ext: "x204", location: "Superintendent" },
-      { name: "Debbie Dunn", role: "Dir. Communications and Community Engagement", ext: "x206", email: "communications@hartdistrict.org", location: "Superintendent" },
+      { name: "Erica Galicia", role: "Exec. Admin. Assistant", ext: "x209", location: "Superintendent", resp: "Governing Board, Conflict of Interest" },
+      { name: "Rheeza McMillan", role: "Admin. Assistant", ext: "x204", location: "Superintendent", resp: "Overnight and Out of Area Student Trips, Board/Superintendent approval, Administrative Council (AdCo), District Advisory Committee (DAC), Parent Communications Council (PCC), Student Communications Council (SCC)" },
+      { name: "Debbie Dunn", role: "Dir. Communications and Community Engagement", ext: "x206", email: "communications@hartdistrict.org", location: "Superintendent", resp: "Communications" },
     ]
   },
   {
     dept: "Human Resources — Certificated (x278)",
     entries: [
       { name: "Dr. Collyn Nielsen", role: "Deputy Superintendent (HR)", ext: "x278", email: "cnielsen@hartdistrict.org", location: "Human Resources" },
-      { name: "Kristiana Molina", role: "Sr. Admin. Asst. — Subpoenas, Summons, AB2534, Dr. Nielsen calls, school calendars, TB Tests (cert. and classified), HDTA/CSEA contracts, Teacher/Employee of the Year", ext: "x278", email: "kmolina@hartdistrict.org", location: "HR-Certificated" },
-      { name: "Michelle Craig", role: "Asst. — Coaches, Volunteers, Athletics, Walk-On Coaches, HR Complaints, Volunteer clearances, Coach ID badges, Summer coaches payroll", ext: "x417", email: "mcraig@hartdistrict.org", location: "HR-Certificated" },
-      { name: "Mark Crawford", role: "Director HR and Athletics", ext: "x316", email: "mtcrawford@hartdistrict.org", location: "HR-Certificated" },
-      { name: "Sondra Celaya", role: "HR Specialist — Employment Verification (loans/mortgages), FMLA, Maternity/Parental Leave, Catastrophic Leave (cert.), Unemployment SDI/EDD, Summer school assignments (cert.), Reasonable Assurance (Cert. and Classified)", ext: "x251", email: "slcelaya@hartdistrict.org", location: "HR-Certificated" },
-      { name: "Lisa Holt", role: "HR Programs Manager — Certificated New Hires, Credentials/Salary Info, Verification of Experience (cert.), Certificated Employee Contracts, Salary Placement", ext: "x280", email: "lholt@hartdistrict.org", location: "HR-Certificated" },
-      { name: "Mignon Stevenson", role: "Credentials Tech — Cert. Subs, Substitute Hiring/Onboarding, Job Postings (cert.), Lateral Transfers (cert.), Change of Address (cert.), Evaluations (cert.), Payroll Cert., Requisitions, Status Notices (cert.)", ext: "x282", email: "mstevenson@hartdistrict.org", location: "HR-Certificated" },
+      { name: "Kristiana Molina", role: "Sr. Admin. Asst. — Subpoenas, Summons, AB2534, Dr. Nielsen calls, school calendars, TB Tests (cert. and classified), HDTA/CSEA contracts, Teacher/Employee of the Year", ext: "x278", email: "kmolina@hartdistrict.org", location: "HR-Certificated", resp: "School calendars, Admin/certificated work calendars, Subpoenas/Summons, Personnel report, University MOUs/Agreements, Site Admin responsibility and staff lists, DOJ sole proprietor, TB Tests, HDTA and CSEA contracts, Teacher of the Year, Employee of the Year" },
+      { name: "Michelle Craig", role: "Asst. — Coaches, Volunteers, Athletics, Walk-On Coaches, HR Complaints, Volunteer clearances, Coach ID badges, Summer coaches payroll", ext: "x417", email: "mcraig@hartdistrict.org", location: "HR-Certificated", resp: "Volunteer clearances, Walk on coaches clearances, Walk on coach status notices, Summer coaches payroll, ID badges volunteers/coaches" },
+      { name: "Mark Crawford", role: "Director HR and Athletics", ext: "x316", email: "mtcrawford@hartdistrict.org", location: "HR-Certificated", resp: "Title IX, Sexual harassment prevention, Uniform complaints, Substitute complaints, Employee complaints, Athletics, Air quality/heat notifications" },
+      { name: "Sondra Celaya", role: "HR Specialist — Employment Verification (loans/mortgages), FMLA, Maternity/Parental Leave, Catastrophic Leave (cert.), Unemployment SDI/EDD, Summer school assignments (cert.), Reasonable Assurance (Cert. and Classified)", ext: "x251", email: "slcelaya@hartdistrict.org", location: "HR-Certificated", resp: "Leaves for certificated and classified, maternity, parental leave, FMLA, Catastrophic leave, Verification of employment for loans, Unemployment SDI/EDD, Summer school assignments" },
+      { name: "Lisa Holt", role: "HR Programs Manager — Certificated New Hires, Credentials/Salary Info, Verification of Experience (cert.), Certificated Employee Contracts, Salary Placement", ext: "x280", email: "lholt@hartdistrict.org", location: "HR-Certificated", resp: "Credential Questions, Certificated Salary Placement, Certificated Employee Contracts, Onboarding certificated employees, Verification of experience" },
+      { name: "Mignon Stevenson", role: "Credentials Tech — Cert. Subs, Substitute Hiring/Onboarding, Job Postings (cert.), Lateral Transfers (cert.), Change of Address (cert.), Evaluations (cert.), Payroll Cert., Requisitions, Status Notices (cert.)", ext: "x282", email: "mstevenson@hartdistrict.org", location: "HR-Certificated", resp: "Status notices certificated, Requisitions certificated, Certificated job postings, Certificated substitute hiring, Lateral transfers, Change of address, Evaluations, Payroll Certificated" },
       { name: "Kristina Frame", role: "HR-Certificated", ext: "x374", location: "HR-Certificated" },
     ]
   },
@@ -4737,26 +4727,24 @@ const DIRECTORY = [
     dept: "Human Resources — Classified",
     entries: [
       { name: "John A. Muraki", role: "Director of Classified Personnel", ext: "x277", email: "jmuraki@hartdistrict.org", location: "HR-Classified" },
-      { name: "Lisa Arnone", role: "Admin. Asst. — Workers Comp, Catastrophic Leave (classified), TB Tests (classified), Evaluations (classified), Professional Growth (classified), Status Notices (classified), Unpaid Leave (classified), Unemployment Claims, Anniversary Salaries, Lateral Job Postings (classified)", ext: "x220", email: "larnone@hartdistrict.org", location: "HR-Classified" },
-      { name: "Gina Doe", role: "HR Analyst — Recruitment, Testing, Exam Announcements", ext: "x411", email: "gdoe@hartdistrict.org", location: "HR-Classified" },
-      { name: "Kelly Csulak", role: "HR Analyst — Requisitions, Salary, Summer School Assignments", ext: "x276", email: "kcsulak@hartdistrict.org", location: "HR-Classified" },
-      { name: "Angelica Mendez", role: "HR Asst. — Address/Name Change (classified), SmartFind system support, Badges (subs and employees), AB 1522 Requests, Classified Substitutes, Keenan SafeSchools Training, Payroll Distribution (classified), Substitute Onboarding", ext: "x410", email: "anmendez@hartdistrict.org", location: "HR-Classified" },
-      { name: "Debbie Lien", role: "HR Technician — Classified Onboarding, New Hire Orientation, Status Notices (classified), Promotions, Separations, Transfers, Requisitions (classified), Personnel Actions, Summer School Assignments (classified)", ext: "x775", email: "dlien@hartdistrict.org", location: "HR-Classified" },
+      { name: "Lisa Arnone", role: "Admin. Asst. — Workers Comp, Catastrophic Leave (classified), TB Tests (classified), Evaluations (classified), Professional Growth (classified), Status Notices (classified), Unpaid Leave (classified), Unemployment Claims, Anniversary Salaries, Lateral Job Postings (classified)", ext: "x220", email: "larnone@hartdistrict.org", location: "HR-Classified", resp: "Evaluations Classified, Professional Growth Classified, Status Notices Classified, TB Tests Classified, Classified Employee of The Year, Anniversary Salaries, Unpaid Leave, Unemployment Claims, Workers Comp, Catastrophic Leave Bank classified, Lateral job postings, Salary/Step Increase notifications, PC meeting agenda and minutes, Reasonable assurance classified" },
+      { name: "Gina Doe", role: "HR Analyst — Recruitment, Testing, Exam Announcements", ext: "x411", email: "gdoe@hartdistrict.org", location: "HR-Classified", resp: "Recruitment/testing classified, Job postings classified, Assessment development" },
+      { name: "Kelly Csulak", role: "HR Analyst — Requisitions, Salary, Summer School Assignments", ext: "x276", email: "kcsulak@hartdistrict.org", location: "HR-Classified", resp: "Eligibility list classified, Salary studies, Classification studies, Data review/audits" },
+      { name: "Angelica Mendez", role: "HR Asst. — Address/Name Change (classified), SmartFind system support, Badges (subs and employees), AB 1522 Requests, Classified Substitutes, Keenan SafeSchools Training, Payroll Distribution (classified), Substitute Onboarding", ext: "x410", email: "anmendez@hartdistrict.org", location: "HR-Classified", resp: "SmartFind, Keenan SafeSchools Training, Substitute Onboarding classified, ID Badge Substitute/New Hires, Change of address/name change classified, MAR forms classified, Payroll classified" },
+      { name: "Debbie Lien", role: "HR Technician — Classified Onboarding, New Hire Orientation, Status Notices (classified), Promotions, Separations, Transfers, Requisitions (classified), Personnel Actions, Summer School Assignments (classified)", ext: "x775", email: "dlien@hartdistrict.org", location: "HR-Classified", resp: "OnBoarding classified, New hire orientation, Status notices classified, Requisitions classified, Personnel actions promotions separations transfers, MAR forms new hire/terminations, Summer school assignments classified" },
       { name: "Deyssy Esquivel R.", role: "HR-Classified", ext: "x382", location: "HR-Classified" },
-      { name: "Patti Miller", role: "HR / Administrative", ext: "x421", location: "Human Resources" },
     ]
   },
   {
     dept: "Student Services",
     entries: [
       { name: "Student Services — Main Line (Joanna Terrazas)", role: "Student Services Department Main Line — Contact: Joanna Terrazas", ext: "x212", location: "Student Services" },
-      { name: "Tara Brown", role: "Asst. Superintendent, Student Services", ext: "x203", location: "Student Services" },
-      { name: "Sal Frias", role: "Chief Admin. Officer, Student Services", ext: "x210", email: "sfrias@hartdistrict.org", location: "CAO - Student Services" },
-      { name: "Joanna Terrazas", role: "Admin. Asst. — Student Records, Enrollment, Transfers", ext: "x212", email: "jnterrazas@hartdistrict.org", location: "Student Services" },
-      { name: "Stephanie Migdol", role: "Admin. Asst. — Transcripts, Student Subpoenas, Attendance (District Level), Job Interview Scheduling", ext: "x203", location: "Student Services" },
+      { name: "Tara Brown", role: "Asst. Superintendent, Student Services", ext: "x203", location: "Student Services", resp: "SARB, Foster Youth" },
+      { name: "Sal Frias", role: "Chief Admin. Officer, Student Services", ext: "x210", email: "sfrias@hartdistrict.org", location: "CAO - Student Services", resp: "Safety" },
+      { name: "Joanna Terrazas", role: "Admin. Asst. — Student Records, Enrollment, Transfers", ext: "x212", email: "jnterrazas@hartdistrict.org", location: "Student Services", resp: "504s, Records of IDTs, IDTs/Open Enrollment, Attendance, SafeVisitor, School Safety Plans, Inter District Transfers, Discipline, Foster Youth, CAPE, Child Abuse, School Resource Officers, Expulsion hearings" },
+      { name: "Stephanie Migdol", role: "Admin. Asst. — Transcripts, Student Subpoenas, Attendance (District Level), Job Interview Scheduling", ext: "x203", location: "Student Services", resp: "Wellness Centers, SSA Safe School Ambassador, Social Workers and Wellness Coordinators, Subpoenas student records, School records for past students, K9 Dogs Schedule" },
       { name: "Sarah Gilberts", role: "Student Services", ext: "x219", location: "Student Services" },
       { name: "Ira Rounsaville", role: "Student Services", ext: "x218", location: "Student Services" },
-      { name: "Elizabeth McAnnally", role: "Student Services", ext: "x214", location: "Student Services" },
       { name: "Nancy Bailey", role: "Work Permits", ext: "x232", email: "nbailey@hartdistrict.org", location: "CTE-CCR" },
     ]
   },
@@ -4765,12 +4753,12 @@ const DIRECTORY = [
     entries: [
       { name: "Joanna White", role: "Director of Special Education", ext: "x377", email: "jmwhite@hartdistrict.org", location: "SpEd" },
       { name: "Meenakshi Hariharan", role: "Admin. Asst. — SpEd, Spanish calls", ext: "x377", email: "mhariharan@hartdistrict.org", location: "SpEd" },
-      { name: "Susie Edwards", role: "Secretary", ext: "x223", location: "SpEd" },
-      { name: "Hanaa Soliman", role: "IEP Records", ext: "x211", location: "SpEd" },
-      { name: "Mary Little", role: "ERICS / Therapist Internships", ext: "x385", email: "mlittle@hartdistrict.org", location: "ERICS" },
+      { name: "Susie Edwards", role: "Secretary — SpEd", ext: "x223", location: "SpEd", resp: "IDTs, NCI Data Sheet, IEP Scheduler, NPS/RTC/Private" },
+      { name: "Hanaa Soliman", role: "IEP Records", ext: "x211", location: "SpEd", resp: "SpEd Records" },
+      { name: "Mary Little", role: "ERICS / Therapist Internships", ext: "x385", email: "mlittle@hartdistrict.org", location: "ERICS", resp: "Internship for Therapist, ERICS DIS and SBC Referrals, School Based Therapists" },
       { name: "Stephanie Cotcher", role: "Clinical Coordinator — ERICS / Therapeutic Counseling", ext: "x387", email: "scotcher@hartdistrict.org", location: "ERICS — Therapeutic Counseling" },
       { name: "Nicholas Betty", role: "Director ERICS", ext: "x386", email: "nbetty@hartdistrict.org", location: "ERICS" },
-      { name: "Elizabeth Calzadillas", role: "Admin. Asst. SpEd / Curriculum", ext: "x225", email: "ecalzadillas@hartdistrict.org", location: "SpEd" },
+      { name: "Elizabeth Calzadillas", role: "Admin. Asst. SpEd", ext: "x225", email: "ecalzadillas@hartdistrict.org", location: "SpEd", resp: "Time Keeper, SpEd Personnel, Legal Requests, Internship for Psychologist, SEIS-CALPADS backup" },
       { name: "Heidi Horowitz", role: "SpEd", ext: "x391", location: "SpEd" },
       { name: "Hilde Ernsberger", role: "SpEd", ext: "x747", location: "SpEd" },
       { name: "Cindy Molacek", role: "SpEd", ext: "x416", location: "SpEd" },
@@ -4779,15 +4767,31 @@ const DIRECTORY = [
       { name: "Shelby Milteer", role: "SpEd", ext: "x391", location: "SpEd" },
       { name: "Julie Albitre", role: "SpEd", ext: "x285", location: "SpEd" },
       { name: "Melissa Lincoln", role: "Program Specialist — Special Education", ext: "x395", location: "SpEd — Special Education" },
-      { name: "Monica Smith", role: "Program Specialist — Special Education", ext: "x260", location: "SpEd — Special Education" },
+      { name: "Monica Smith", role: "Program Specialist — Special Education", ext: "x260", location: "SpEd — Special Education", resp: "Special Ed Conferences, Account Technician" },
+      { name: "Elizabeth McAnnally", role: "Student Services", ext: "x214", location: "Student Services", resp: "Medi-Cal, MAA" },
+      { name: "Lisa Seeley", role: "Coordinator of SpEd", ext: "x223", location: "SpEd", resp: "ESY Coordinator (SpEd Summer School), SEIS training, CAC Advisory, AB1172 Annual Visits/Reports" },
+      { name: "Laura Pedrick", role: "SpEd", ext: "x211", location: "SpEd", resp: "SEIS, CalPads" },
+      { name: "Irmina Manzano", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Normita Meza", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Claudia Arrue", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Deanne Barton", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Kelsey Cespedes", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Christian Pineda", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Sarah Roberts", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Candace Schuetz", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Eva Swanson", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Melanie Melendez", role: "SpEd", ext: "—", location: "SpEd — Special Education" },
+      { name: "Yvonne Castaneda", role: "SpEd", ext: "x389", location: "SpEd — Special Education" },
+      { name: "Patti Miller", role: "SpEd", ext: "x421", location: "SpEd — Special Education" },
+      { name: "Shallu Makan", role: "CCR Program Specialist", ext: "x239", email: "smakan@hartdistrict.org", location: "SpEd — Special Education" },
     ]
   },
   {
     dept: "Educational Services (x207)",
     entries: [
       { name: "Vince Ferry", role: "Asst. Superintendent, Ed. Services", ext: "x207", email: "vferry@hartdistrict.org", location: "Ed. Services" },
-      { name: "Cristina Herrera-Lopez", role: "Admin. Asst. — Flyer Approvals", ext: "x207", location: "Ed. Services" },
-      { name: "Dave LeBarron", role: "Director, Curriculum and Assessment", ext: "x226", email: "dlebarron@hartdistrict.org", location: "Curriculum" },
+      { name: "Cristina Herrera-Lopez", role: "Admin. Asst. — Flyer Approvals", ext: "x207", location: "Ed. Services", resp: "Williams Complaints, Curriculum Council, Board Policies, Flyer Approval, Minimum Days, Admin Academy, Master Schedules" },
+      { name: "Dave LeBarron", role: "Director, Curriculum and Assessment", ext: "x226", email: "dlebarron@hartdistrict.org", location: "Curriculum", resp: "SCVi SCV Charter School Complaints" },
       { name: "Kim Jimenez", role: "Ed. Services", ext: "x319", location: "Ed. Services" },
       { name: "Aaron Kirkland", role: "Ed. Services", ext: "x320", location: "Ed. Services" },
       { name: "David Williams", role: "Ed. Services", ext: "x317", location: "Ed. Services" },
@@ -4797,55 +4801,54 @@ const DIRECTORY = [
     dept: "CTE-CCR (x222)",
     entries: [
       { name: "Carolyn Hoffman", role: "CAO Educational Services / Director CCR", ext: "x228", email: "choffman@hartdistrict.org", location: "CTE-CCR" },
-      { name: "Claudia Balouzian", role: "Admin. Asst. CCR / Work Permits (school breaks)", ext: "x222", email: "cbalouzian@hartdistrict.org", location: "CTE-CCR" },
-      { name: "Taline Balouzian", role: "CTE-CCR", ext: "x248", location: "CTE-CCR" },
-      { name: "Shallu Makan", role: "CCR Program Specialist", ext: "x239", email: "smakan@hartdistrict.org", location: "CTE-CCR" },
+      { name: "Claudia Balouzian", role: "Admin. Asst. CCR / Work Permits (school breaks)", ext: "x222", email: "cbalouzian@hartdistrict.org", location: "CTE-CCR", resp: "Career and College Readiness, CCR Calendar, Work Permits" },
       { name: "Shari Kraidman", role: "CTE-CCR", ext: "x238", email: "skraidman@hartdistrict.org", location: "CTE-CCR" },
       { name: "Olga Lavalle", role: "CTE-CCR", ext: "x367", email: "olavalle@hartdistrict.org", location: "CTE-CCR" },
       { name: "Jessica Martinez", role: "CTE-CCR / Work Permits (school breaks)", ext: "x365", email: "jmartinez@hartdistrict.org", location: "CTE-CCR" },
       { name: "Veronica Reyes", role: "CTE-CCR", ext: "x368", email: "vreyes@hartdistrict.org", location: "CTE-CCR" },
       { name: "Alicia Viera", role: "CTE-CCR", ext: "x366", email: "aviera@hartdistrict.org", location: "CTE-CCR" },
-      { name: "Yvonne Castaneda", role: "CTE-CCR", ext: "x389", location: "CTE-CCR" },
     ]
   },
   {
     dept: "Business Services and Payroll (Biz Serv. x242 / Payroll Cert. x255 / Payroll Class. x261)",
     entries: [
       { name: "Jon Carrino", role: "Asst. Superintendent, Business Services", ext: "x254", email: "jcarrino@hartdistrict.org", location: "Business Services" },
-      { name: "Denise Miller", role: "Sr. Admin. Asst. — Booster Club, Job Interview Scheduling", ext: "x242", email: "dmiller@hartdistrict.org", location: "Business Services" },
-      { name: "Gretchen Bergstrom", role: "Director Fiscal Services — Booster Clubs, fiscal oversight, budget management", ext: "x266", email: "gbergstrom@hartdistrict.org", location: "Fiscal" },
-      { name: "Veronica Reyes-Cruz", role: "Payroll Supervisor — Accounting Supervisor (Payroll)", ext: "x270", email: "vreyescruz@hartdistrict.org", location: "Accounting" },
-      { name: "Brandy Speir", role: "Certificated Payroll", ext: "x255", email: "payroll@hartdistrict.org", location: "Payroll" },
-      { name: "Armineh Karapet", role: "Classified Payroll", ext: "x261", email: "payroll@hartdistrict.org", location: "Payroll" },
+      { name: "Denise Miller", role: "Sr. Admin. Asst. — Booster Club, Job Interview Scheduling", ext: "x242", email: "dmiller@hartdistrict.org", location: "Business Services", resp: "Staff Out-of-State Conferences, Scholarships" },
+      { name: "Gretchen Bergstrom", role: "Director Fiscal Services — Booster Clubs, fiscal oversight, budget management", ext: "x266", email: "gbergstrom@hartdistrict.org", location: "Fiscal", resp: "Booster clubs" },
+      { name: "Millie Gaines", role: "Accounting Supervisor — Payroll", ext: "x270", email: "payroll@hartdistrict.org", location: "Payroll", resp: "Payroll general" },
+      { name: "Veronica Reyes-Cruz", role: "Payroll Supervisor — Accounting Supervisor (Payroll)", ext: "x270", email: "vreyescruz@hartdistrict.org", location: "Accounting", resp: "ASB accounting" },
+      { name: "Brandy Speir", role: "Certificated Payroll", ext: "x255", email: "payroll@hartdistrict.org", location: "Payroll", resp: "Payroll certificated, Certificated Express Benefit Report Form" },
+      { name: "Armineh Karapet", role: "Classified Payroll", ext: "x261", email: "payroll@hartdistrict.org", location: "Payroll", resp: "Payroll classified, Classified Express Benefit Report Form" },
       { name: "Patrick McHorney", role: "Payroll Specialist", ext: "x272", location: "Payroll" },
-      { name: "Melissa Hernandez", role: "Benefits Specialist — Health/Dental, Medical Benefits, Employee Retirement Medical (Cert. and Classified)", ext: "x267", email: "benefits@hartdistrict.org", location: "Benefits" },
+      { name: "Melissa Hernandez", role: "Benefits Specialist — Health/Dental, Medical Benefits, Employee Retirement Medical (Cert. and Classified)", ext: "x267", email: "benefits@hartdistrict.org", location: "Benefits", resp: "Retirees, Cash Lieu, Schools First Deduction Form, Request for emp. info from Social Security (Retired emps.)" },
       { name: "Accounts Payable", role: "Bills, Invoices, Benefits payments", ext: "x248/249", location: "Fiscal" },
-      { name: "Annie Hamilton", role: "Accounting Technician III — SpEd and General Accounting", ext: "x257", email: "ahamilton@hartdistrict.org", location: "Accounting" },
-      { name: "Elena Muradova", role: "Accounting Technician III — LCAP and Grants", ext: "x288", email: "emuradova@hartdistrict.org", location: "Accounting" },
-      { name: "Cynthia Ramirez", role: "Business Systems Analyst", ext: "x252", email: "cramirez@hartdistrict.org", location: "Accounting" },
-      { name: "Shannon Rodgers-Abarca", role: "Accounting Technician III — ASBs / Free-Reduced Lunch", ext: "x239", email: "sabarca@hartdistrict.org", location: "Accounting" },
-      { name: "Jessica Smith", role: "Accountant / Internal Auditor — Budget and Accounting", ext: "x287", email: "jsmith@hartdistrict.org", location: "Accounting - Audit" },
-      { name: "Janell Wheeler", role: "Accountant / Internal Auditor — Accounting and Audit", ext: "x376", email: "jwheeler@hartdistrict.org", location: "Accounting - Audit" },
-      { name: "Wade Takamoto", role: "Accountant / Internal Auditor — ASBs", ext: "x215", email: "wtakamoto@hartdistrict.org", location: "Accounting" },
-      { name: "Caryn Chan", role: "Accounting Technician II — Special Programs", ext: "x259", email: "cchan@hartdistrict.org", location: "Accounting" },
-      { name: "Leonor Chathle", role: "Accounting Technician II — Accounts Receivable", ext: "x256", email: "lchathle@hartdistrict.org", location: "Accounting" },
+      { name: "Annie Hamilton", role: "Accounting Technician III — SpEd and General Accounting", ext: "x257", email: "ahamilton@hartdistrict.org", location: "Accounting", resp: "Special Ed accounting support" },
+      { name: "Elena Muradova", role: "Accounting Technician III — LCAP and Grants", ext: "x288", email: "emuradova@hartdistrict.org", location: "Accounting", resp: "LCAP and Miscellaneous Grants" },
+      { name: "Cynthia Ramirez", role: "Business Systems Analyst", ext: "x252", email: "cramirez@hartdistrict.org", location: "Accounting", resp: "Informed K12, Kronos Updates" },
+      { name: "Shannon Rodgers-Abarca", role: "Accounting Technician III — ASBs / Free-Reduced Lunch", ext: "x269", email: "sabarca@hartdistrict.org", location: "Accounting", resp: "Free and reduced lunch applications, Cafeteria accounting, ASB, AP Exam Fees" },
+      { name: "Jessica Smith", role: "Accountant / Internal Auditor — Budget and Accounting", ext: "x287", email: "jsmith@hartdistrict.org", location: "Accounting - Audit", resp: "Budget and account strings" },
+      { name: "Janell Wheeler", role: "Accountant / Internal Auditor — Accounting and Audit", ext: "x376", email: "jwheeler@hartdistrict.org", location: "Accounting - Audit", resp: "Accounting and Audit, Cal Card submissions, Attendance" },
+      { name: "Wade Takamoto", role: "Accountant / Internal Auditor — ASBs", ext: "x215", email: "wtakamoto@hartdistrict.org", location: "Accounting", resp: "ASB" },
+      { name: "Caryn Chan", role: "Accounting Technician II — Special Programs", ext: "x259", email: "cchan@hartdistrict.org", location: "Accounting", resp: "Special Programs Accounting (Title 1-IV) and PAR Forms" },
+      { name: "Leonor Chathle", role: "Accounting Technician II — Accounts Receivable", ext: "x256", email: "lchathle@hartdistrict.org", location: "Accounting", resp: "Deposits, Accounts receivable" },
       { name: "Laura Flores", role: "Office Assistant II — Accounting", ext: "x217", email: "lflores@hartdistrict.org", location: "Fiscal" },
       { name: "Dharren Magbanua", role: "Manager of Fiscal Services", ext: "x258", email: "dmagbanua@hartdistrict.org", location: "Fiscal" },
-      { name: "Carolyn McMahon", role: "Accounting Technician II — Adult Ed and CTE", ext: "x265", email: "cmcmahon@hartdistrict.org", location: "Accounting" },
-      { name: "Judy Valdovinos", role: "Asst. Special Programs — Homeless students, Professional Development, Intervention, WASC, EL, Title I-IV, Diploma Stamps, General Ed Translation", ext: "x233", email: "jvaldovinos@hartdistrict.org", location: "Special Programs" },
+      { name: "Carolyn McMahon", role: "Accounting Technician II — Adult Ed and CTE", ext: "x265", email: "cmcmahon@hartdistrict.org", location: "Accounting", resp: "Adult Ed, CTE accounting support, travel/conference forms" },
+      { name: "Taline Balouzian", role: "Accounting Technician I — Accounts Payable", ext: "x248", location: "Fiscal", resp: "Accounts payable: N-Z, M&O, Special Ed, transportation" },
+      { name: "Sayeda Soliman", role: "Accounting", ext: "x249", location: "Accounting", resp: "Accounts payable: A-M, facilities, utilities, Reimbursements mileage travel" },
       { name: "Ramya Kalyanaraman", role: "Accounting", ext: "x384", location: "Accounting" },
-      { name: "Sayeda Soliman", role: "Accounting", ext: "x249", location: "Accounting" },
     ]
   },
   {
     dept: "Purchasing and Warehouse (x262/275/380/332 / Warehouse x306)",
     entries: [
-      { name: "Leigh Hansen", role: "Director of Purchasing and Warehouse", ext: "x332", location: "Purchasing" },
-      { name: "Rosa Romero-Valenzuela", role: "Contracts/Bids — Purchasing contracts, vendor bids", ext: "x275", location: "Purchasing" },
-      { name: "Ron Ippolito", role: "Sample Deliveries, Brochures, Orders", ext: "x380", location: "Purchasing" },
-      { name: "Gina Peterson", role: "Credit Card Pickups/Returns", ext: "x262", location: "Purchasing" },
-      { name: "Jason Carpenter", role: "Warehouse", ext: "x250/306", location: "Warehouse" },
-      { name: "Mike Miller", role: "Warehouse", ext: "x260", location: "Warehouse" },
+      { name: "Leigh Hansen", role: "Director of Purchasing and Warehouse", ext: "x332", location: "Purchasing", resp: "Surplus property, Cal cards, Copiers" },
+      { name: "Rosa Romero-Valenzuela", role: "Contracts/Bids — Purchasing contracts, vendor bids", ext: "x275", location: "Purchasing", resp: "Contracts, Bids" },
+      { name: "Ron Ippolito", role: "Sample Deliveries, Brochures, Orders", ext: "x380", location: "Purchasing", resp: "DCC, Cal Cards" },
+      { name: "Gina Peterson", role: "Credit Card Pickups/Returns", ext: "x262", location: "Purchasing", resp: "SmarteTools/Purchasing" },
+      { name: "Jason Carpenter", role: "Warehouse", ext: "x250/306", location: "Warehouse", resp: "Mail" },
+      { name: "Mike Miller", role: "Warehouse", ext: "x260", location: "Warehouse", resp: "Warehouse" },
+      { name: "Marcus Andrade", role: "Warehouse — Receiving and Deliveries", ext: "x306", location: "Warehouse", resp: "Receiving/Deliveries" },
     ]
   },
   {
@@ -4854,9 +4857,9 @@ const DIRECTORY = [
       { name: "Mike Otavka", role: "Director, Facilities", ext: "—", location: "Facilities" },
       { name: "Sarah Silva", role: "Director of Facilities, Planning and Construction", ext: "x274", email: "sesilva@hartdistrict.org", location: "Facilities" },
       { name: "Carle Manley", role: "Director, Maintenance and Operations", ext: "x324", email: "cmanley@hartdistrict.org", location: "M&O" },
-      { name: "Laura Best", role: "Admin. Asst., Maintenance", ext: "x321", email: "lbest@hartdistrict.org", location: "M&O" },
+      { name: "Laura Best", role: "Admin. Asst., Maintenance", resp: "Work Orders, Fire Dept. Inspections, Alarm Systems", ext: "x321", email: "lbest@hartdistrict.org", location: "M&O" },
       { name: "Maintenance and Ops", role: "Spills, Cleaning, Electrical, Alarms", ext: "x321/323", location: "M&O" },
-      { name: "Marc Bradley", role: "Development Fees, Facility Use", ext: "x286", email: "mbradley@hartdistrict.org", location: "Facilities" },
+      { name: "Marc Bradley", role: "Development Fees, Facility Use", resp: "Development Fees, City Facilities Contact Info Santa Clarita Castaic", ext: "x286", email: "mbradley@hartdistrict.org", location: "Facilities" },
       { name: "Civic Center", role: "Facility Rental", ext: "x445", email: "civiccenter@hartdistrict.org", location: "Facilities" },
       { name: "Jack Kapp", role: "Sr. Project Manager, Facilities", ext: "x264", email: "jkapp@hartdistrict.org", location: "Facilities" },
       { name: "David Cambaliza", role: "Supervisor of Grounds and Operations", ext: "x325", email: "dcambaliza@hartdistrict.org", location: "M&O" },
@@ -4869,7 +4872,7 @@ const DIRECTORY = [
   {
     dept: "Risk Management (x220)",
     entries: [
-      { name: "Sonia Pishehvar", role: "Director of Risk Management and Safety", ext: "x253", location: "Risk Management" },
+      { name: "Sonia Pishehvar", role: "Director of Risk Management and Safety", ext: "x253", location: "Risk Management", resp: "Disaster Preparedness, Student Injuries, District Claims, Employee accommodations, Ergonomic assessment" },
       { name: "Lisa Arnone", role: "Admin. Asst., Risk Management", ext: "x220", email: "larnone@hartdistrict.org", location: "HR-Classified" },
     ]
   },
@@ -4902,7 +4905,7 @@ const DIRECTORY = [
   {
     dept: "Food Services — SODEXO (x750)",
     entries: [
-      { name: "Shannon Rodgers-Abarca", role: "Free/Reduced Lunch Inquiries", ext: "x239", location: "Accounting" },
+      { name: "Shannon Rodgers-Abarca", role: "Free/Reduced Lunch Inquiries", ext: "x269", location: "Accounting" },
       { name: "FRAM", role: "Free/Reduced Lunch Applications", ext: "x216/217", location: "Food Services" },
       { name: "Michael Adella", role: "General Manager, Food Services - Sodexo", ext: "x753", email: "madella@hartdistrict.org", location: "SODEXO" },
       { name: "Catherine Cardenas", role: "SODEXO Payroll / Admin. Asst.", ext: "x750/754", email: "ccardenas@hartdistrict.org", location: "SODEXO" },
@@ -4972,9 +4975,10 @@ const DIRECTORY = [
     entries: [
       { name: "Alyssa Thompson", role: "District Nurse — VA, RN Office", ext: "x1603", location: "Rio Norte RN", email: "athompson@hartdistrict.org" },
       { name: "Danielle Ewing", role: "District Nurse — HA, PL, TLC, AOC, LPA, GO", ext: "—", location: "Hart HS", email: "dewing@hartdistrict.org" },
-      { name: "Michelle Dizon", role: "District Nurse (Dept Chair) — SA Office, AS, CA, BO, SQ", ext: "x3169", location: "Saugus SA", email: "mdizon@hartdistrict.org" },
+      { name: "Michelle Dizon", role: "District Nurse (Dept Chair) — SA Office, AS, CA, BO, SQ", ext: "x3169", location: "Saugus SA — Health Office", email: "mdizon@hartdistrict.org" },
       { name: "Sarah Morris", role: "District Nurse — GV, LM Office, SV", ext: "x304", location: "La Mesa", email: "smorris@hartdistrict.org" },
-      { name: "Tina Hepp", role: "District Nurse — Castaic, WR, RP Office", ext: "x1413", location: "Rio Pico RP", email: "thepp@hartdistrict.org" },
+      { name: "Tina Hepp", role: "District Nurse — Castaic, WR, RP Office", ext: "x1413", location: "Rio Pico RP", email: "thepp@hartdistrict.org", resp: "District Health Services, District Covid Guidelines" },
+      { name: "Tiffany Knight", role: "Assistant — District Health Services", ext: "—", location: "Health Services", resp: "District Health Services, District Covid Guidelines" },
       { name: "Tiffany Night", role: "District LVN", ext: "x130", location: "District LVN", email: "tnight@hartdistrict.org" },
     ]
   },
@@ -4982,14 +4986,15 @@ const DIRECTORY = [
     dept: "Special Programs (x233/243/244)",
     entries: [
       { name: "Jan Daisher", role: "Director of Special Programs and Professional Development", ext: "x243", location: "Special Programs", email: "jdaisher@hartdistrict.org" },
-      { name: "Judy Valdovinos", role: "Admin. Asst. — Homeless students, Professional Development, Intervention, WASC, EL, Title I-IV, Diploma Stamps, Translation", ext: "x233", location: "Special Programs", email: "jvaldovinos@hartdistrict.org" },
+      { name: "Judy Valdovinos", role: "Admin. Asst. — Homeless students, Professional Development, Intervention, WASC, EL, Title I-IV, Diploma Stamps, General Ed Translation", resp: "Homeless, Professional Development, Intervention, WASC, EL, Title I II III IV, Diploma Stamps, Gen Ed Translation", ext: "x233", location: "Special Programs", email: "jvaldovinos@hartdistrict.org" },
       { name: "Courtney Straka", role: "Supervisor of Professional Development and Student Achievement Data", ext: "x318", location: "Special Programs", email: "cstraka@hartdistrict.org" },
       { name: "Kacey Kapp", role: "Program Specialist ELD", ext: "x610", location: "Special Programs", email: "kkapp@hartdistrict.org" },
     ]
   },
   {
-    dept: "Department Quick Extensions",
+    dept: "Quick Extensions",
     entries: [
+      { name: "Head of Security", role: "Head of Security — District Office", ext: "x203", location: "District Office" },
       { name: "Accounts Receivable", role: "Accounts Receivable", ext: "x256", location: "Accounting" },
       { name: "Mechanic Shop", role: "M&O Mechanic Shop", ext: "x343", location: "M&O" },
       { name: "Mail Room", role: "District Mail Room", ext: "x397", location: "District Office" },
@@ -5016,7 +5021,6 @@ const DIRECTORY = [
   {
     dept: "Health Office",
     entries: [
-      { name: "Michelle Dizon", role: "District Nurse — AS, CA, Bowman/SQ", ext: "—", location: "Health Office" },
       { name: "Tina Hepp", role: "Dept. Chair, District Nurse — WR, CS", ext: "—", location: "Health Office" },
       { name: "Jennifer Jenkins", role: "District Nurse — PL/TTC, LP, HA", ext: "—", location: "Health Office" },
       { name: "Alyssa Thompson", role: "District Nurse — VA", ext: "x1603", location: "Health Office" },
@@ -5405,8 +5409,11 @@ function initSearch() {
     dept.entries.forEach(function(e) {
       SEARCH_DATA.push({
         label: e.name,
-        sub: (e.role + ' ' + dept.dept + ' ' + e.ext + ' ' + (e.email || '') + ' ' + (e.location || '')).toLowerCase(),
+        sub: (e.role + ' ' + dept.dept + ' ' + e.ext + ' ' + (e.email || '') + ' ' + (e.location || '') + ' ' + (e.resp || '')).toLowerCase(),
         ext: e.ext,
+        dept: dept.dept,
+        role: e.role,
+        location: e.location || '',
         type: 'directory',
         index: null
       });
@@ -5572,7 +5579,8 @@ function initSearch() {
 
     searchResults.innerHTML = lastHits.map(function(h, i) {
       var typeLabel = h.type === 'inquiry' ? '⚡ Quick Board' : h.type === 'directory' ? '📋 Directory' : h.type === 'school' ? '🏫 School Site' : h.type === 'procedure' ? '📋 Procedure' : h.type === 'guide' ? '📖 Guide' : h.type === 'rights' ? '⚖️ CA Rights' : h.type;
-      return '<div class="search-result-item" onclick="handleSearchClick(' + i + ')"><div class="sri-left"><div class="sri-topic">' + h.label + '</div><div class="sri-dept">' + typeLabel + ' — ' + h.ext + '</div></div><span class="sri-ext">' + typeLabel + '</span></div>';
+      var subLabel = (h.type === 'directory' && h.dept) ? h.dept + (h.location ? ' · ' + h.location : '') + ' — ' + h.ext : typeLabel + ' — ' + h.ext;
+      return '<div class="search-result-item" onclick="handleSearchClick(' + i + ')"><div class="sri-left"><div class="sri-topic">' + h.label + '</div><div class="sri-dept">' + subLabel + '</div></div><span class="sri-ext">' + h.ext + '</span></div>';
     }).join('');
     searchResults.classList.add('visible');
   });
